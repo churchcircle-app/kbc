@@ -236,7 +236,7 @@ body{
       <div class="link-arrow">›</div>
     </a>
 
-    <a class="link-btn" href="https://www.kbconline.ca/live-stream" target="_blank">
+    <a class="link-btn" href="https://www.kbconline.ca/live-stream" onclick="trackLink('Watch Online','https://www.kbconline.ca/live-stream',event)">
       <div class="link-icon" style="background:rgba(91,143,249,0.18)">▶️</div>
       <div class="link-text">
         <div class="link-label">Watch Online</div>
@@ -254,7 +254,7 @@ body{
       <div class="link-arrow">›</div>
     </a>
 
-    <a class="link-btn" href="https://www.kbconline.ca/give" target="_blank">
+    <a class="link-btn" href="https://www.kbconline.ca/give" onclick="trackLink('Give Online','https://www.kbconline.ca/give',event)">
       <div class="link-icon" style="background:rgba(247,201,75,0.18)">💛</div>
       <div class="link-text">
         <div class="link-label">Give Online</div>
@@ -263,7 +263,7 @@ body{
       <div class="link-arrow">›</div>
     </a>
 
-    <a class="link-btn" href="https://kbc.churchcenter.com/registrations/events" target="_blank">
+    <a class="link-btn" href="https://kbc.churchcenter.com/registrations/events" onclick="trackLink('Events','https://kbc.churchcenter.com/registrations/events',event)">
       <div class="link-icon" style="background:rgba(240,123,84,0.18)">📅</div>
       <div class="link-text">
         <div class="link-label">Events</div>
@@ -305,6 +305,11 @@ if (g && g.show) {
 // ── CONNECT CARD ──────────────────────────────────────
 function openConnect(e) {
   e.preventDefault();
+  fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/link_clicks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Prefer': 'return=minimal' },
+    body: JSON.stringify({ circle: circle, link_name: 'Connect Card', clicked_at: new Date().toISOString() })
+  }).catch(() => {});
   document.getElementById('connect-card').classList.add('show');
   document.getElementById('connect-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -380,6 +385,24 @@ Object.entries(socials).forEach(([key, val]) => {
 
 if (hasSocial) {
   socialRow.style.display = 'flex';
+}
+
+
+// ── LINK CLICK TRACKING ───────────────────────────────
+function trackLink(linkName, url, event) {
+  event.preventDefault();
+  fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/link_clicks', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify({ circle: circle, link_name: linkName, clicked_at: new Date().toISOString() })
+  }).catch(() => {}).finally(() => {
+    if (url && url !== '#') window.open(url, '_blank');
+  });
 }
 
 // ── TAP ANALYTICS ─────────────────────────────────────
