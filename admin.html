@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChurchCircle Admin — KBC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;height:100%;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#070d14;color:#fff;height:100%;overflow:hidden;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px;}
+
+.app{display:flex;height:100vh;overflow:hidden;}
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;}
+.scroll{flex:1;overflow-y:auto;}
+
+/* SIDEBAR */
+.sidebar{
+  width:68px;background:#080f1c;border-right:1px solid rgba(255,255,255,0.06);
+  display:flex;flex-direction:column;align-items:center;padding:18px 0;gap:5px;
+  flex-shrink:0;
+}
+.sb-logo{
+  width:40px;height:40px;background:linear-gradient(135deg,#39b5bc,#f7c94b);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:900;font-size:18px;color:#070d14;
+  margin-bottom:14px;cursor:pointer;box-shadow:0 0 28px rgba(57,181,188,0.4);transition:transform 0.2s;
+}
+.sb-logo:hover{transform:scale(1.07);}
+.nav-btn{
+  width:42px;height:42px;border-radius:12px;border:none;background:transparent;
+  color:rgba(255,255,255,0.35);cursor:pointer;display:flex;align-items:center;
+  justify-content:center;transition:all 0.2s;position:relative;
+}
+.nav-btn svg{width:20px;height:20px;stroke-width:1.8;}
+.nav-btn:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.8);}
+.nav-btn.active{background:rgba(57,181,188,0.15);color:#39b5bc;}
+.nav-btn.active::before{
+  content:'';position:absolute;left:-1px;top:50%;transform:translateY(-50%);
+  width:3px;height:22px;background:#39b5bc;border-radius:0 3px 3px 0;
+}
+.sb-spacer{flex:1;}
+.sb-av{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,#39b5bc,#2d8c92);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:700;font-size:13px;cursor:pointer;
+}
+
+/* VIEWS */
+.view{display:none;flex-direction:column;flex:1;}
+.view.active{display:flex;}
+
+/* BUTTONS */
+.btn-p{
+  display:inline-flex;align-items:center;gap:7px;padding:10px 18px;
+  background:linear-gradient(135deg,#39b5bc,#2d8c92);border:none;
+  border-radius:12px;color:#fff;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all 0.2s;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;
+}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(57,181,188,0.4);}
+.btn-g{
+  display:inline-flex;align-items:center;gap:6px;padding:8px 14px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
+  border-radius:10px;color:rgba(255,255,255,0.65);font-size:12px;font-weight:500;
+  cursor:pointer;transition:all 0.2s;white-space:nowrap;font-family:'Plus Jakarta Sans',sans-serif;
+}
+.btn-g:hover{background:rgba(255,255,255,0.09);color:#fff;}
+
+/* HEADER */
+.pg-hdr{
+  padding:28px 32px 16px;display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.pg-title{font-family:'Fraunces',serif;font-size:26px;font-weight:700;}
+.pg-sub{font-size:12px;color:rgba(255,255,255,0.4);margin-top:3px;}
+
+/* STAT CARDS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:0 32px 22px;}
+.stat{
+  background:#0e1928;border:1px solid rgba(255,255,255,0.07);border-radius:18px;
+  padding:18px 20px;position:relative;overflow:hidden;
+}
+.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--a);border-radius:18px 18px 0 0;}
+.sv{font-family:'Fraunces',serif;font-size:30px;font-weight:700;line-height:1;}
+.sl{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.st{font-size:11px;font-weight:600;margin-top:7px;color:#4ade80;}
+.st.dn{color:#f87171;}
+
+/* CIRCLES */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:0 32px 14px;}
+.sec-t{font-size:14px;font-weight:700;color:rgba(255,255,255,0.85);}
+.cgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:0 32px 32px;}
+.ccard{
+  background:#0e1928;border:1px solid rgba(255,255,255,0.07);border-radius:20px;
+  padding:20px;transition:all 0.25s;
+}
+.ccard:hover{border-color:rgba(57,181,188,0.3);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,0.4);}
+.ct{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.cbadge{
+  display:inline-flex;align-items:center;gap:5px;padding:4px 9px;
+  background:rgba(255,255,255,0.06);border-radius:7px;
+  font-size:10px;font-weight:600;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.5px;
+}
+.swrap{display:flex;align-items:center;gap:5px;}
+.sdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sdot.live{background:#4ade80;box-shadow:0 0 8px #4ade80;animation:pulse 2s infinite;}
+.sdot.off{background:rgba(255,255,255,0.2);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+.stxt{font-size:10px;color:rgba(255,255,255,0.35);}
+.cn{font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:3px;}
+.cl{font-size:11px;color:rgba(255,255,255,0.38);}
+.cstats{display:flex;gap:18px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);align-items:flex-end;}
+.csv{font-family:'Fraunces',serif;font-size:20px;font-weight:700;}
+.csl{font-size:10px;color:rgba(255,255,255,0.38);margin-top:1px;}
+.mc{display:flex;align-items:flex-end;gap:3px;height:28px;margin-left:auto;}
+.mb{width:5px;border-radius:3px 3px 0 0;background:rgba(57,181,188,0.28);}
+.mb.pk{background:#39b5bc;}
+.ccard:hover .mb{background:rgba(57,181,188,0.48);}
+.ccard:hover .mb.pk{background:#f7c94b;}
+.clast{font-size:10px;color:rgba(255,255,255,0.22);margin-top:7px;}
+.cacts{display:flex;gap:7px;margin-top:12px;}
+.ab{
+  flex:1;padding:7px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:9px;color:rgba(255,255,255,0.55);font-size:11px;font-weight:500;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;
+  transition:all 0.2s;font-family:'Plus Jakarta Sans',sans-serif;
+}
+.ab:hover{background:rgba(57,181,188,0.12);border-color:rgba(57,181,188,0.3);color:#39b5bc;}
+.ab.pv:hover{background:rgba(247,201,75,0.1);border-color:rgba(247,201,75,0.3);color:#f7c94b;}
+
+/* ANALYTICS */
+.awrap{padding:0 32px 32px;}
+.agrid{display:grid;grid-template-columns:2fr 1fr;gap:18px;}
+.acard{background:#0e1928;border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:22px;}
+.atitle{font-size:11px;font-weight:700;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:18px;}
+.bchart{display:flex;align-items:flex-end;gap:6px;height:110px;}
+.bgrp{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.bcol{width:0%;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#39b5bc,rgba(57,181,188,0.2));transition:all 0.2s;cursor:pointer;}
+.bcol:hover{background:linear-gradient(180deg,#f7c94b,rgba(247,201,75,0.2));}
+.bday{font-size:10px;color:rgba(255,255,255,0.28);}
+.tlist{display:flex;flex-direction:column;gap:14px;}
+.trow{display:flex;align-items:center;gap:10px;}
+.trank{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:rgba(255,255,255,0.18);width:20px;flex-shrink:0;}
+.tinfo{flex:1;min-width:0;}
+.tname{font-size:12px;font-weight:600;}
+.tloc{font-size:10px;color:rgba(255,255,255,0.35);}
+.tbar{height:3px;background:rgba(255,255,255,0.07);border-radius:3px;margin-top:4px;}
+.tfill{height:100%;border-radius:3px;background:linear-gradient(90deg,#39b5bc,#f7c94b);}
+.ttaps{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:#39b5bc;flex-shrink:0;}
+.lgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:4px;}
+.lstat{padding:14px;background:rgba(255,255,255,0.03);border-radius:13px;border:1px solid rgba(255,255,255,0.06);}
+.licon{font-size:20px;margin-bottom:7px;}
+.lpct{font-family:'Fraunces',serif;font-size:22px;font-weight:700;}
+.lname{font-size:11px;color:rgba(255,255,255,0.42);margin-top:2px;}
+.ltaps{font-size:10px;color:rgba(255,255,255,0.22);margin-top:3px;}
+
+/* SUBMISSIONS */
+.subs-wrap{padding:0 32px 32px;}
+.subs-table{width:0%;border-collapse:collapse;}
+.subs-table th{
+  text-align:left;padding:10px 14px;font-size:11px;font-weight:600;
+  color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.subs-table td{
+  padding:13px 14px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04);
+  color:rgba(255,255,255,0.8);
+}
+.subs-table tr:hover td{background:rgba(255,255,255,0.02);}
+.sub-badge{
+  display:inline-block;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;
+  background:rgba(57,181,188,0.12);color:#39b5bc;
+}
+
+/* EDITOR */
+.elayout{display:grid;grid-template-columns:1fr 260px;flex:1;overflow:hidden;}
+.escroll{overflow-y:auto;padding:24px 24px 40px 32px;}
+.ephone{
+  border-left:1px solid rgba(255,255,255,0.06);padding:24px 18px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  background:#070d14;overflow-y:auto;
+}
+.eplbl{font-size:10px;color:rgba(255,255,255,0.28);text-transform:uppercase;letter-spacing:1.2px;}
+.phone-sm{
+  width:196px;height:412px;background:#111;border-radius:30px;
+  border:6px solid #1e2530;box-shadow:0 20px 50px rgba(0,0,0,0.6);
+  overflow:hidden;position:relative;flex-shrink:0;
+}
+.phone-sm-n{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:56px;height:14px;background:#111;border-radius:9px;z-index:10;}
+.phone-sm-i{width:150%;height:150%;transform:scale(0.667);transform-origin:top left;overflow:hidden;}
+.ehint{font-size:10px;color:rgba(255,255,255,0.22);text-align:center;max-width:160px;line-height:1.55;}
+.es{margin-bottom:26px;}
+.est{font-size:10px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.ilbl{font-size:11px;color:rgba(255,255,255,0.38);margin-bottom:4px;display:block;}
+.inp{width:0%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:9px 13px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;transition:border-color 0.2s;margin-bottom:9px;}
+.inp:focus{border-color:rgba(57,181,188,0.5);background:rgba(57,181,188,0.04);}
+.cgrid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px;}
+.csw{display:flex;align-items:center;gap:9px;padding:8px 11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;cursor:pointer;transition:border-color 0.2s;}
+.csw:hover{border-color:rgba(57,181,188,0.4);}
+.csd{width:20px;height:20px;border-radius:5px;flex-shrink:0;}
+.cslb{font-size:10px;color:rgba(255,255,255,0.42);}
+.cshx{font-size:12px;font-family:monospace;color:#fff;}
+input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:none;}
+.bgopts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px;}
+.bgopt{height:40px;border-radius:9px;border:2px solid transparent;cursor:pointer;transition:all 0.2s;}
+.bgopt:hover{transform:scale(1.04);}
+.bgopt.sel{border-color:#39b5bc;box-shadow:0 0 12px rgba(57,181,188,0.3);}
+.fbtns{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.fbtn{padding:8px 10px;background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:9px;font-size:11px;color:rgba(255,255,255,0.5);transition:all 0.2s;text-align:center;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+.fbtn:hover{border-color:rgba(57,181,188,0.4);color:#fff;}
+.fbtn.sel{border-color:#39b5bc;background:rgba(57,181,188,0.1);color:#fff;}
+.llist{display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
+.li{display:flex;align-items:center;gap:9px;padding:9px 11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:11px;}
+.liico{font-size:16px;flex-shrink:0;}
+.liinf{flex:1;min-width:0;}
+.linm{font-size:12px;font-weight:600;}
+.liub{font-size:10px;color:rgba(255,255,255,0.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lidel{background:none;border:none;color:rgba(255,255,255,0.2);cursor:pointer;padding:4px;border-radius:5px;font-size:14px;transition:all 0.2s;line-height:1;flex-shrink:0;}
+.lidel:hover{color:#f87171;background:rgba(248,113,113,0.1);}
+.tglr{display:flex;align-items:center;justify-content:space-between;padding:8px 0;}
+.tgll{font-size:12px;color:rgba(255,255,255,0.65);}
+.tgl{width:38px;height:20px;border-radius:10px;border:none;cursor:pointer;position:relative;transition:background 0.25s;flex-shrink:0;}
+.tgl::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform 0.25s;box-shadow:0 1px 4px rgba(0,0,0,0.3);}
+.tgl.on{background:#39b5bc;}
+.tgl.on::after{transform:translateX(18px);}
+.tgl.off{background:rgba(255,255,255,0.14);}
+
+/* PREVIEW */
+.ptbar{padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:#080f1c;}
+.ptitle{font-size:13px;font-weight:600;}
+.pfw{flex:1;display:flex;align-items:center;justify-content:center;padding:28px;overflow:hidden;background:#070d14;background-image:radial-gradient(circle at 50% 10%,rgba(57,181,188,0.08) 0%,transparent 55%);}
+.pf{width:300px;height:600px;background:#111;border-radius:42px;border:8px solid #1e2530;box-shadow:0 40px 80px rgba(0,0,0,0.7);overflow:hidden;position:relative;flex-shrink:0;}
+.pn{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:80px;height:20px;background:#111;border-radius:12px;z-index:10;}
+.pi{width:0%;height:100%;overflow-y:auto;}
+.pi::-webkit-scrollbar{display:none;}
+
+/* SETUP */
+.setupwrap{padding:0 32px 32px;}
+.scard{background:#0e1928;border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:24px;margin-bottom:16px;}
+.sstep{display:flex;gap:16px;align-items:flex-start;}
+.snum{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#39b5bc,#2d8c92);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:16px;flex-shrink:0;}
+.sinfo{flex:1;}
+.stitle{font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:5px;}
+.sdesc{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;}
+.slink{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:7px 14px;background:rgba(57,181,188,0.1);border:1px solid rgba(57,181,188,0.25);border-radius:9px;font-size:12px;font-weight:600;color:#39b5bc;cursor:pointer;transition:all 0.2s;text-decoration:none;}
+.slink:hover{background:rgba(57,181,188,0.18);}
+.url-box{margin-top:12px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;font-family:monospace;font-size:12px;color:#39b5bc;word-break:break-all;}
+
+/* MODAL */
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;z-index:500;padding:20px;}
+.mov.show{display:flex;}
+.modal{background:#0e1928;border:1px solid rgba(255,255,255,0.1);border-radius:22px;padding:28px;width:460px;max-width:0%;max-height:88vh;overflow-y:auto;}
+.mtitle{font-family:'Fraunces',serif;font-size:21px;font-weight:700;margin-bottom:5px;}
+.msub{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:22px;}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.topt{padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:14px;cursor:pointer;text-align:left;color:#fff;transition:all 0.2s;}
+.topt:hover{border-color:#39b5bc;background:rgba(57,181,188,0.08);}
+.toi{font-size:22px;margin-bottom:7px;}
+.ton{font-family:'Fraunces',serif;font-size:14px;font-weight:700;margin-bottom:3px;}
+.tod{font-size:11px;color:rgba(255,255,255,0.35);}
+.mbtns{display:flex;gap:9px;margin-top:22px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:#39b5bc;color:#fff;padding:11px 22px;border-radius:12px;font-size:13px;font-weight:600;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);z-index:999;display:flex;align-items:center;gap:7px;box-shadow:0 8px 30px rgba(57,181,188,0.45);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* LP styles (mini preview) */
+.lp{width:0%;min-height:100%;display:flex;flex-direction:column;}
+.lp-dark{background:linear-gradient(160deg,#0a1929,#0e2440,#071520);}
+.lp-warm{background:linear-gradient(160deg,#1a0f07,#2a1810,#1a0f07);}
+.lp-bright{background:linear-gradient(160deg,#f5f8ff,#e8f0fb);}
+.lp-midnight{background:linear-gradient(160deg,#08081a,#14082e,#08081a);}
+.lp-forest{background:linear-gradient(160deg,#071a12,#0d3020,#071a12);}
+.lp-slate{background:linear-gradient(160deg,#0d1117,#1c2333,#0d1117);}
+.lph{padding:52px 18px 20px;text-align:center;}
+.lplo{width:68px;height:68px;border-radius:20px;margin:0 auto 13px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:24px;font-weight:900;box-shadow:0 12px 36px rgba(0,0,0,0.35);}
+.lpn{font-family:'Fraunces',serif;font-size:20px;font-weight:700;line-height:1.2;}
+.lpt{font-size:11px;margin-top:3px;font-style:italic;opacity:0.5;}
+.lpls{padding:6px 14px 20px;display:flex;flex-direction:column;gap:8px;}
+.lpb{display:flex;align-items:center;gap:11px;padding:13px 14px;border-radius:15px;border:1px solid rgba(255,255,255,0.11);background:rgba(255,255,255,0.07);color:#fff;text-align:left;transition:all 0.18s;cursor:pointer;}
+.lpb-br{background:rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.1);color:#1a1520;}
+.lpi{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.lptx{flex:1;min-width:0;}
+.lpl{font-size:13px;font-weight:600;}
+.lps{font-size:10px;opacity:0.5;margin-top:1px;}
+.lpar{opacity:0.3;font-size:14px;flex-shrink:0;}
+.lpf{text-align:center;font-size:9px;opacity:0.2;padding-bottom:20px;letter-spacing:1px;text-transform:uppercase;margin-top:auto;padding-top:8px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-logo" onclick="V('dashboard')">C</div>
+    <button class="nav-btn active" id="nav-dashboard" onclick="V('dashboard')" title="Circles">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    </button>
+    <button class="nav-btn" id="nav-analytics" onclick="V('analytics')" title="Analytics">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    </button>
+    <button class="nav-btn" id="nav-submissions" onclick="V('submissions')" title="Connect Cards">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    </button>
+    <button class="nav-btn" id="nav-setup" onclick="V('setup')" title="NFC Setup">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 7a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2"/><path d="M4 17a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2"/><path d="M12 7v10"/><path d="M16 9.5v5"/><path d="M8 9.5v5"/></svg>
+    </button>
+    <div class="sb-spacer"></div>
+    <div class="sb-av">N</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="scroll">
+
+      <!-- DASHBOARD -->
+      <div class="view active" id="view-dashboard">
+        <div class="pg-hdr">
+          <div><div class="pg-title">KBC Circles</div><div class="pg-sub">Kennebecasis Baptist Church · 0 active</div></div>
+          <div style="display:flex;gap:9px">
+            <a class="btn-g" href="/index.html" target="_blank">🔗 View Live Site</a>
+            <button class="btn-p" onclick="document.getElementById('mnew').classList.add('show')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New Circle
+            </button>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat" style="--a:#39b5bc"><div class="sv">0</div><div class="sl">Total All-Time Taps</div><div class="st">No taps yet</div></div>
+          <div class="stat" style="--a:#f7c94b"><div class="sv">0</div><div class="sl">Taps This Week</div><div class="st">No data yet</div></div>
+          <div class="stat" style="--a:#4ade80"><div class="sv">0</div><div class="sl">Active Circles</div><div class="st">of 4 total</div></div>
+          <div class="stat" style="--a:#9b72cb"><div class="sv">—</div><div class="sl">Connect Card Rate</div><div class="st">No data yet</div></div>
+        </div>
+        <div class="sec-hdr">
+          <div class="sec-t">Your Circles</div>
+          <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:8px;background:rgba(74,222,128,0.12);color:#4ade80;font-size:11px;font-weight:600;">
+            <span class="sdot live" style="display:inline-block"></span> 0 Live
+          </span>
+        </div>
+        <div class="cgrid">
+          <div class="ccard">
+            <div class="ct"><span class="cbadge">🪑 Chair</span><div class="swrap"><span class="sdot live"></span><span class="stxt">Active</span></div></div>
+            <div class="cn">Main Auditorium</div><div class="cl">📍 Back of every chair</div>
+            <div class="cstats">
+              <div><div class="csv">0</div><div class="csl">Total Taps</div></div>
+              <div><div class="csv" style="color:#4ade80;font-size:15px">—</div><div class="csl">This Week</div></div>
+              <div class="mc" id="mc1"></div>
+            </div>
+            <div class="clast">No taps yet</div>
+            <div class="cacts">
+              <button class="ab pv" onclick="showPrev('auditorium')">👁 Preview</button>
+              <button class="ab" onclick="showEd('auditorium')">✏️ Edit</button>
+              <button class="ab" onclick="V('setup')">📡 NFC</button>
+            </div>
+          </div>
+          <div class="ccard">
+            <div class="ct"><span class="cbadge">☕ Lobby</span><div class="swrap"><span class="sdot live"></span><span class="stxt">Active</span></div></div>
+            <div class="cn">Lobby & Café</div><div class="cl">📍 Café counter & welcome table</div>
+            <div class="cstats">
+              <div><div class="csv">0</div><div class="csl">Total Taps</div></div>
+              <div><div class="csv" style="color:#4ade80;font-size:15px">—</div><div class="csl">This Week</div></div>
+              <div class="mc" id="mc2"></div>
+            </div>
+            <div class="clast">No taps yet</div>
+            <div class="cacts">
+              <button class="ab pv" onclick="showPrev('lobby')">👁 Preview</button>
+              <button class="ab" onclick="showEd('lobby')">✏️ Edit</button>
+              <button class="ab" onclick="V('setup')">📡 NFC</button>
+            </div>
+          </div>
+          <div class="ccard">
+            <div class="ct"><span class="cbadge">🧒 Kids</span><div class="swrap"><span class="sdot live"></span><span class="stxt">Active</span></div></div>
+            <div class="cn">KBC Kids Wing</div><div class="cl">📍 Kids check-in entrance</div>
+            <div class="cstats">
+              <div><div class="csv">0</div><div class="csl">Total Taps</div></div>
+              <div><div class="csv" style="color:#4ade80;font-size:15px">—</div><div class="csl">This Week</div></div>
+              <div class="mc" id="mc3"></div>
+            </div>
+            <div class="clast">No taps yet</div>
+            <div class="cacts">
+              <button class="ab pv" onclick="showPrev('kids')">👁 Preview</button>
+              <button class="ab" onclick="showEd('kids')">✏️ Edit</button>
+              <button class="ab" onclick="V('setup')">📡 NFC</button>
+            </div>
+          </div>
+          <div class="ccard" style="opacity:0.65">
+            <div class="ct"><span class="cbadge">🚪 Outdoor</span><div class="swrap"><span class="sdot off"></span><span class="stxt">Inactive</span></div></div>
+            <div class="cn">Parking Lot Welcome</div><div class="cl">📍 Main entrance</div>
+            <div class="cstats">
+              <div><div class="csv">0</div><div class="csl">Total Taps</div></div>
+              <div><div class="csv" style="color:#f87171;font-size:15px">—</div><div class="csl">This Week</div></div>
+              <div class="mc" id="mc4"></div>
+            </div>
+            <div class="clast">No taps yet</div>
+            <div class="cacts">
+              <button class="ab pv" onclick="showPrev('auditorium')">👁 Preview</button>
+              <button class="ab" onclick="showEd('auditorium')">✏️ Edit</button>
+              <button class="ab" onclick="V('setup')">📡 NFC</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="view" id="view-analytics">
+        <div class="pg-hdr">
+          <div><div class="pg-title">Analytics</div><div class="pg-sub">All circles · Last 7 days</div></div>
+          <div style="display:flex;gap:9px"><button class="btn-g">This Week ▾</button><button class="btn-g">Export CSV</button></div>
+        </div>
+        <div class="stats">
+          <div class="stat" style="--a:#39b5bc"><div class="sv">0</div><div class="sl">Total All-Time Taps</div><div class="st">No taps yet</div></div>
+          <div class="stat" style="--a:#f7c94b"><div class="sv">0</div><div class="sl">Taps This Week</div><div class="st">No data yet</div></div>
+          <div class="stat" style="--a:#4ade80"><div class="sv">0</div><div class="sl">Active Circles</div><div class="st">of 4 total</div></div>
+          <div class="stat" style="--a:#9b72cb"><div class="sv">—</div><div class="sl">Connect Card Rate</div><div class="st">No data yet</div></div>
+        </div>
+        <div class="awrap">
+          <div class="agrid">
+            <div class="acard">
+              <div class="atitle">Weekly Tap Volume</div>
+              <div class="bchart" id="mchart"></div>
+              <div style="display:flex;gap:16px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06)">
+                <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Auditorium</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">0</div></div>
+                <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Lobby</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">0</div></div>
+                <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Kids</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">0</div></div>
+                <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Outdoor</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">7</div></div>
+              </div>
+            </div>
+            <div class="acard">
+              <div class="atitle">Top Circles</div>
+              <div class="tlist">
+                <div class="trow"><div class="trank">1</div><div class="tinfo"><div class="tname">Auditorium</div><div class="tloc">Chair Circle</div><div class="tbar"><div class="tfill" style="width:0%"></div></div></div><div class="ttaps">0</div></div>
+                <div class="trow"><div class="trank">2</div><div class="tinfo"><div class="tname">Lobby & Café</div><div class="tloc">Lobby Circle</div><div class="tbar"><div class="tfill" style="width:0%"></div></div></div><div class="ttaps">0</div></div>
+                <div class="trow"><div class="trank">0</div><div class="tinfo"><div class="tname">Kids Wing</div><div class="tloc">Kids Check-In</div><div class="tbar"><div class="tfill" style="width:0%"></div></div></div><div class="ttaps">0</div></div>
+                <div class="trow"><div class="trank">4</div><div class="tinfo"><div class="tname">Entrance</div><div class="tloc">Parking Lot</div><div class="tbar"><div class="tfill" style="width:0%"></div></div></div><div class="ttaps">0</div></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:18px">
+            <div class="acard">
+              <div class="atitle">Most Tapped Links</div>
+              <div class="lgrid">
+                <div class="lstat"><div class="licon">📋</div><div class="lpct" style="color:#39b5bc">—</div><div class="lname">Connect Card</div><div class="ltaps">0 taps</div></div>
+                <div class="lstat"><div class="licon">💛</div><div class="lpct" style="color:#f7c94b">—</div><div class="lname">Give Online</div><div class="ltaps">0 taps</div></div>
+                <div class="lstat"><div class="licon">▶️</div><div class="lpct" style="color:#5b8ff9">—</div><div class="lname">Watch Online</div><div class="ltaps">0 taps</div></div>
+                <div class="lstat"><div class="licon">👋</div><div class="lpct" style="color:#4ade80">—</div><div class="lname">I'm New Here</div><div class="ltaps">0 taps</div></div>
+                <div class="lstat"><div class="licon">🙏</div><div class="lpct" style="color:#9b72cb">—</div><div class="lname">Prayer Request</div><div class="ltaps">0 taps</div></div>
+                <div class="lstat"><div class="licon">📅</div><div class="lpct" style="color:#f07b54">—</div><div class="lname">Events</div><div class="ltaps">0 taps</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONNECT CARD SUBMISSIONS -->
+      <div class="view" id="view-submissions">
+        <div class="pg-hdr">
+          <div><div class="pg-title">Connect Cards</div><div class="pg-sub">All form submissions · forwarded to nate@kbconline.ca</div></div>
+          <button class="btn-g">Export CSV</button>
+        </div>
+        <div class="subs-wrap">
+          <div class="acard">
+            <table class="subs-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Circle</th>
+                  <th>Visit #</th>
+                  <th>Interest</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                
+                
+                
+                
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- NFC SETUP -->
+      <div class="view" id="view-setup">
+        <div class="pg-hdr"><div><div class="pg-title">NFC Setup</div><div class="pg-sub">How to program and deploy your circles</div></div></div>
+        <div class="setupwrap">
+          <div class="scard"><div class="sstep"><div class="snum">1</div><div class="sinfo"><div class="stitle">Order your NFC tags</div><div class="sdesc">Get <strong>NTAG215 round epoxy stickers</strong> from Amazon — durable, waterproof, perfect for chair backs. About $15 for 50 tags.<br><br>For chair backs: 30mm round epoxy stickers.<br>For lobby/café: standard white sticker tags work great.</div><a class="slink" href="https://www.amazon.ca/s?k=NFC+stickers+NTAG215+round+epoxy" target="_blank">🛒 Search Amazon Canada →</a></div></div></div>
+          <div class="scard"><div class="sstep"><div class="snum">2</div><div class="sinfo"><div class="stitle">Download NFC Tools app</div><div class="sdesc">Free app on iOS and Android. Open it → Write → Add Record → URL. Program each circle type with its URL below. All chair-back circles use the same auditorium URL — you only scan them once ever.</div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px;">
+              <div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:4px;">🪑 Auditorium URL (program all chair tags with this)</div><div class="url-box">https://kbc.churchcircle.app/?circle=auditorium</div></div>
+              <div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:4px;">☕ Lobby URL</div><div class="url-box">https://kbc.churchcircle.app/?circle=lobby</div></div>
+              <div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:4px;">🧒 Kids URL</div><div class="url-box">https://kbc.churchcircle.app/?circle=kids</div></div>
+            </div>
+          </div></div></div>
+          <div class="scard"><div class="sstep"><div class="snum">0</div><div class="sinfo"><div class="stitle">Stick & deploy</div><div class="sdesc">Place tags centre-bottom of seat backs. Add a small printed label above that says <em>"Tap to connect →"</em> — this alone doubles your tap rate.<br><br>For lobby, stick to the café counter edge or on a small acrylic stand.</div></div></div></div>
+          <div class="scard"><div class="sstep"><div class="snum">4</div><div class="sinfo"><div class="stitle">Update links remotely anytime</div><div class="sdesc">The tag URL never changes. When you edit a circle here and hit Save, it updates instantly for every person who taps — no touching the physical tags ever again.<br><br>Swap links for special events, update your giving campaign, or turn circles off temporarily — all from this dashboard.</div></div></div></div>
+        </div>
+      </div>
+
+      <!-- PREVIEW -->
+      <div class="view" id="view-preview">
+        <div class="ptbar">
+          <div style="display:flex;align-items:center;gap:11px">
+            <button class="btn-g" onclick="V('dashboard')" style="padding:7px 11px">← Back</button>
+            <div><div class="ptitle" id="ptitle">Preview</div><div style="font-size:11px;color:rgba(255,255,255,0.35)">What people see when they tap</div></div>
+          </div>
+          <button class="btn-g" id="pedit-btn">✏️ Edit This Circle</button>
+        </div>
+        <div class="pfw">
+          <div class="pf"><div class="pn"></div><div class="pi" id="pi"></div></div>
+        </div>
+      </div>
+
+      <!-- EDITOR -->
+      <div class="view" id="view-editor">
+        <div class="elayout">
+          <div class="escroll">
+            <div style="display:flex;align-items:center;gap:11px;margin-bottom:24px">
+              <button class="btn-g" onclick="V('dashboard')" style="padding:7px 11px">← Back</button>
+              <div>
+                <div id="edtitle" style="font-family:'Fraunces',serif;font-size:19px;font-weight:700">Edit Circle</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.35)">Changes push live instantly — no rescanning</div>
+              </div>
+              <button class="btn-p" style="margin-left:auto" onclick="saveIt()">✓ Save Changes</button>
+            </div>
+            <div class="es">
+              <div class="est">Church Info</div>
+              <label class="ilbl">Church Name</label>
+              <input class="inp" id="en" value="Kennebecasis Baptist Church" oninput="lp()">
+              <label class="ilbl">Tagline</label>
+              <input class="inp" id="et" value="Loved. Known. Sent." oninput="lp()">
+              <label class="ilbl">Logo Initials / Emoji</label>
+              <input class="inp" id="el" value="KBC" maxlength="4" oninput="lp()">
+            </div>
+            <div class="es">
+              <div class="est">Brand Colors</div>
+              <div class="cgrid2">
+                <div class="csw" onclick="document.getElementById('cp1').click()"><div class="csd" id="sw1" style="background:#39b5bc"></div><div><div class="cslb">Primary</div><div class="cshx" id="hx1">#39b5bc</div></div><input type="color" id="cp1" value="#39b5bc" oninput="uc(1,this.value)"></div>
+                <div class="csw" onclick="document.getElementById('cp2').click()"><div class="csd" id="sw2" style="background:#2d8c92"></div><div><div class="cslb">Secondary</div><div class="cshx" id="hx2">#2d8c92</div></div><input type="color" id="cp2" value="#2d8c92" oninput="uc(2,this.value)"></div>
+                <div class="csw" onclick="document.getElementById('cp3').click()"><div class="csd" id="sw3" style="background:#f7c94b"></div><div><div class="cslb">Accent</div><div class="cshx" id="hx3">#f7c94b</div></div><input type="color" id="cp3" value="#f7c94b" oninput="uc(3,this.value)"></div>
+                <div class="csw" onclick="document.getElementById('cp4').click()"><div class="csd" id="sw4" style="background:#39b5bc"></div><div><div class="cslb">Logo BG</div><div class="cshx" id="hx4">#39b5bc</div></div><input type="color" id="cp4" value="#39b5bc" oninput="uc(4,this.value)"></div>
+              </div>
+            </div>
+            <div class="es">
+              <div class="est">Background</div>
+              <div class="bgopts">
+                <div class="bgopt sel" data-bg="dark" style="background:linear-gradient(135deg,#0a1929,#0e2440)" onclick="sbg(this,'dark')"></div>
+                <div class="bgopt" data-bg="warm" style="background:linear-gradient(135deg,#1a0f07,#2a1810)" onclick="sbg(this,'warm')"></div>
+                <div class="bgopt" data-bg="bright" style="background:linear-gradient(135deg,#f5f8ff,#e0ecff)" onclick="sbg(this,'bright')"></div>
+                <div class="bgopt" data-bg="midnight" style="background:linear-gradient(135deg,#08081a,#14082e)" onclick="sbg(this,'midnight')"></div>
+                <div class="bgopt" data-bg="forest" style="background:linear-gradient(135deg,#071a12,#0d3020)" onclick="sbg(this,'forest')"></div>
+                <div class="bgopt" data-bg="slate" style="background:linear-gradient(135deg,#0d1117,#1c2333)" onclick="sbg(this,'slate')"></div>
+              </div>
+            </div>
+            <div class="es">
+              <div class="est">Typography</div>
+              <div class="fbtns">
+                <button class="fbtn sel" data-f="fraunces" onclick="sf(this,'fraunces')">Fraunces — Elegant</button>
+                <button class="fbtn" data-f="jakarta" onclick="sf(this,'jakarta')">Jakarta — Modern</button>
+              </div>
+            </div>
+            <div class="es">
+              <div class="est">Links</div>
+              <div class="llist" id="ell"></div>
+              <button class="btn-g" style="width:0%;justify-content:center" onclick="addL()">+ Add Link</button>
+            </div>
+            <div class="es">
+              <div class="est">Settings</div>
+              <div class="tglr"><span class="tgll">Circle Active</span><button class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></div>
+              <div class="tglr"><span class="tgll">Show "Powered by ChurchCircle"</span><button class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></div>
+              <div class="tglr"><span class="tgll">Connect Card Prompt on Load</span><button class="tgl off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></div>
+            </div>
+          </div>
+          <div class="ephone">
+            <div class="eplbl">Live Preview</div>
+            <div class="phone-sm"><div class="phone-sm-n"></div><div class="phone-sm-i" id="ep"></div></div>
+            <div class="ehint">Updates as you type. Save to push to all NFC tags instantly.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- NEW CIRCLE MODAL -->
+<div class="mov" id="mnew" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal">
+    <div class="mtitle">Add New Circle</div>
+    <div class="msub">Choose the type of NFC circle for KBC</div>
+    <div class="tgrid">
+      <button class="topt" onclick="closeM();showEd('auditorium')"><div class="toi">🪑</div><div class="ton">Chair Circle</div><div class="tod">Back of seats in auditorium</div></button>
+      <button class="topt" onclick="closeM();showEd('lobby')"><div class="toi">☕</div><div class="ton">Lobby / Café</div><div class="tod">Welcome area or café counter</div></button>
+      <button class="topt" onclick="closeM();showEd('kids')"><div class="toi">🧒</div><div class="ton">Kids Wing</div><div class="tod">Check-in or kids area</div></button>
+      <button class="topt" onclick="closeM()"><div class="toi">🚪</div><div class="ton">Outdoor</div><div class="tod">Parking lot or entrance</div></button>
+      <button class="topt" onclick="closeM()"><div class="toi">📌</div><div class="ton">Bulletin Board</div><div class="tod">Hallway or community board</div></button>
+      <button class="topt" onclick="closeM()"><div class="toi">✨</div><div class="ton">Custom</div><div class="tod">Build from scratch</div></button>
+    </div>
+    <div class="mbtns"><button class="btn-g" style="flex:1;justify-content:center" onclick="closeM()">Cancel</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">✓ Saved — all NFC circles updated instantly!</div>
+
+<script>
+const CIRCLES={
+  auditorium:{title:'Main Auditorium',name:'Kennebecasis Baptist Church',tag:'Loved. Known. Sent.',logo:'KBC',bg:'dark',font:'fraunces',c1:'#39b5bc',c2:'#2d8c92',c3:'#f7c94b',c4:'#39b5bc',links:[
+    {icon:'👋',lbl:"I'm New Here",sub:'Say hello & connect',url:'https://www.kbconline.ca'},
+    {icon:'📋',lbl:'Connect Card',sub:'Fill out & stay in touch',url:'https://www.kbconline.ca/live-stream'},
+    {icon:'▶️',lbl:'Watch Online',sub:'Live & past messages',url:'https://www.kbconline.ca/live-stream'},
+    {icon:'🙏',lbl:'Prayer Request',sub:"We're praying with you",url:'https://www.kbconline.ca'},
+    {icon:'💛',lbl:'Give Online',sub:'Generous & secure',url:'https://www.kbconline.ca/give'},
+    {icon:'📅',lbl:'Events',sub:"What's coming up at KBC",url:'https://kbc.churchcenter.com/registrations/events'},
+  ]},
+  lobby:{title:'Lobby & Café',name:'Kennebecasis Baptist Church',tag:'Loved. Known. Sent.',logo:'KBC',bg:'warm',font:'fraunces',c1:'#c07850',c2:'#8c5530',c3:'#f7c94b',c4:'#c07850',links:[
+    {icon:'☕',lbl:'Grab a Coffee',sub:'Meet someone new today',url:'https://www.kbconline.ca'},
+    {icon:'👋',lbl:"I'm New Here",sub:"We'd love to meet you",url:'https://www.kbconline.ca'},
+    {icon:'📋',lbl:'Connect Card',sub:'Stay connected with us',url:'https://www.kbconline.ca/live-stream'},
+    {icon:'📅',lbl:'Upcoming Events',sub:"Don't miss what's next",url:'https://kbc.churchcenter.com/registrations/events'},
+    {icon:'💛',lbl:'Give',sub:'Support the mission',url:'https://www.kbconline.ca/give'},
+  ]},
+  kids:{title:'KBC Kids Wing',name:'KBC Kids',tag:'Big faith for little people.',logo:'🙌',bg:'bright',font:'jakarta',c1:'#f7c94b',c2:'#f07b54',c3:'#39b5bc',c4:'#f7c94b',links:[
+    {icon:'✅',lbl:'Check In',sub:'Register your child',url:'https://www.kbconline.ca'},
+    {icon:'📅',lbl:'Kids Events',sub:'Summer camp & more',url:'https://kbc.churchcenter.com/registrations/events'},
+    {icon:'📖',lbl:'Family Devotional',sub:"This week's take-home",url:'https://www.kbconline.ca'},
+    {icon:'👨‍👩‍👧',lbl:'Volunteer',sub:'Serve on the kids team',url:'https://www.kbconline.ca'},
+  ]}
+};
+const MD={mc1:[0,0,0,0,0,0,0],mc2:[0,0,0,0,0,0,0],mc3:[0,0,0,0,0,0,0],mc4:[0,0,0,0,0,0,0]};
+const MAIN=[0,0,0,0,0,0,0];
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+let eBg='dark',eFont='fraunces',eC={c1:'#39b5bc',c2:'#2d8c92',c3:'#f7c94b',c4:'#39b5bc'};
+
+function init(){
+  Object.entries(MD).forEach(([id,data])=>{
+    const el=document.getElementById(id);if(!el)return;
+    const mx=Math.max(...data);
+    el.innerHTML=data.map((v,i)=>`<div class="mb${v===mx?' pk':''}" style="height:${Math.max(4,(v/mx)*28)}px"></div>`).join('');
+  });
+  const mc=document.getElementById('mchart');if(mc){
+    const mx=Math.max(...MAIN);
+    mc.innerHTML=MAIN.map((v,i)=>`<div class="bgrp"><div class="bcol" style="height:${Math.max(4,(v/mx)*100)}px"></div><span class="bday">${DAYS[i]}</span></div>`).join('');
+  }
+  loadLinks('auditorium');lp();
+}
+
+function V(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const el=document.getElementById('view-'+name);if(el)el.classList.add('active');
+  const nav=document.getElementById('nav-'+name);if(nav)nav.classList.add('active');
+}
+
+function buildLP(cfg){
+  const dark=cfg.bg!=='bright';
+  const tc=dark?'#fff':'#1a1520';
+  const bc=dark?'lp lp-'+cfg.bg:'lp lp-'+cfg.bg;
+  const btnc=dark?'lpb':'lpb lpb-br';
+  const ff=cfg.font==='fraunces'?"'Fraunces',serif":"'Plus Jakarta Sans',sans-serif";
+  return`<div class="${bc}"><div class="lph"><div class="lplo" style="background:linear-gradient(135deg,${cfg.c1},${cfg.c2})">${cfg.logo}</div><div class="lpn" style="color:${tc};font-family:${ff}">${cfg.name}</div><div class="lpt" style="color:${tc}">${cfg.tag}</div></div><div class="lpls">${cfg.links.map(l=>`<div class="${btnc}"><div class="lpi" style="background:${cfg.c1}22">${l.icon}</div><div class="lptx"><div class="lpl" style="color:${tc};font-family:${ff}">${l.lbl}</div><div class="lps" style="color:${tc}">${l.sub}</div></div><div class="lpar" style="color:${tc}">›</div></div>`).join('')}</div><div class="lpf" style="color:${tc}">Powered by ChurchCircle</div></div>`;
+}
+
+function showPrev(key){
+  const cfg=CIRCLES[key];
+  document.getElementById('ptitle').textContent=cfg.title+' — Preview';
+  document.getElementById('pi').innerHTML=buildLP(cfg);
+  document.getElementById('pedit-btn').onclick=()=>showEd(key);
+  V('preview');
+}
+
+function showEd(key){
+  const cfg=CIRCLES[key];
+  document.getElementById('edtitle').textContent='Edit — '+cfg.title;
+  document.getElementById('en').value=cfg.name;
+  document.getElementById('et').value=cfg.tag;
+  document.getElementById('el').value=cfg.logo;
+  eBg=cfg.bg;eFont=cfg.font;
+  eC={c1:cfg.c1,c2:cfg.c2,c3:cfg.c3,c4:cfg.c4};
+  [1,2,3,4].forEach(i=>{
+    document.getElementById('sw'+i).style.background=eC['c'+i];
+    document.getElementById('hx'+i).textContent=eC['c'+i];
+    document.getElementById('cp'+i).value=eC['c'+i];
+  });
+  document.querySelectorAll('.bgopt').forEach(b=>b.classList.toggle('sel',b.dataset.bg===eBg));
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('sel',b.dataset.f===eFont));
+  loadLinks(key);lp();V('editor');
+}
+
+function loadLinks(key){
+  const el=document.getElementById('ell');
+  el.innerHTML=CIRCLES[key].links.map(l=>`<div class="li"><span class="liico">${l.icon}</span><div class="liinf"><div class="linm">${l.lbl}</div><div class="liub">${l.url}</div></div><button class="lidel" onclick="this.closest('.li').remove();lp()">✕</button></div>`).join('');
+}
+
+function lp(){
+  const links=[];
+  document.querySelectorAll('#ell .li').forEach(item=>{
+    links.push({icon:item.querySelector('.liico').textContent,lbl:item.querySelector('.linm').textContent,sub:item.querySelector('.liub').textContent,url:'#'});
+  });
+  const cfg={name:document.getElementById('en')?.value||'Church Name',tag:document.getElementById('et')?.value||'',logo:document.getElementById('el')?.value||'KBC',bg:eBg,font:eFont,...eC,links};
+  document.getElementById('ep').innerHTML=buildLP(cfg);
+}
+
+function uc(n,v){eC['c'+n]=v;document.getElementById('sw'+n).style.background=v;document.getElementById('hx'+n).textContent=v;lp();}
+function sbg(el,bg){eBg=bg;document.querySelectorAll('.bgopt').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');lp();}
+function sf(el,f){eFont=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');lp();}
+function addL(){const e=['🌟','📣','🎉','🤝','💬','📰','✝️','🙌'];const ico=e[Math.floor(Math.random()*e.length)];const d=document.createElement('div');d.className='li';d.innerHTML=`<span class="liico">${ico}</span><div class="liinf"><div class="linm">New Link</div><div class="liub">https://</div></div><button class="lidel" onclick="this.closest('.li').remove();lp()">✕</button>`;document.getElementById('ell').appendChild(d);lp();}
+function saveIt(){const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function closeM(){document.getElementById('mnew').classList.remove('show');}
+
+init();
+</script>
+</body>
+</html>
