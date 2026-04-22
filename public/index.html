@@ -283,23 +283,99 @@ body{
 
 <script>
 // ── CIRCLE DETECTION ──────────────────────────────────
-// Reads ?circle=auditorium / lobby / kids from the URL
-// so one codebase serves all circles
 const params = new URLSearchParams(window.location.search);
 const circle = params.get('circle') || 'auditorium';
 
-const GREETINGS = {
-  auditorium: { show: false },
-  lobby: { show: true, msg: "☕ Welcome! Grab a coffee and make yourself at home. Tap below to connect with us." },
-  kids: { show: true, msg: "🧒 Welcome to KBC Kids! Tap below to check in your child or learn more." },
-  outdoor: { show: true, msg: "👋 Welcome to KBC! We're glad you're here. Tap below to connect." }
-};
+const SB_URL = 'https://jhiovbtqrrvhbnesuerx.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw';
 
-const g = GREETINGS[circle];
-if (g && g.show) {
-  const el = document.getElementById('greeting');
-  el.textContent = g.msg;
-  el.classList.add('show');
+// ── LOAD CIRCLE CONFIG FROM SUPABASE ──────────────────
+async function loadCircle() {
+  try {
+    const res = await fetch(SB_URL + '/rest/v1/circles?id=eq.' + circle + '&select=*', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    const data = await res.json();
+    if (data && data.length > 0) {
+      renderCircle(data[0]);
+    } else {
+      // Circle not found in DB — show default fallback
+      renderFallback();
+    }
+  } catch(e) {
+    console.log('Load error:', e);
+    renderFallback();
+  }
+}
+
+function renderCircle(cfg) {
+  // Update logo
+  const logoEl = document.getElementById('logo');
+  if (logoEl) {
+    logoEl.textContent = cfg.logo || 'KBC';
+    logoEl.style.background = 'linear-gradient(135deg,' + cfg.c1 + ',' + cfg.c2 + ')';
+  }
+
+  // Update church name & tagline
+  const nameEl = document.getElementById('church-name');
+  const tagEl = document.getElementById('church-tagline');
+  if (nameEl) nameEl.textContent = cfg.name || '';
+  if (tagEl) tagEl.textContent = cfg.tagline || '';
+
+  // Update background
+  const bgMap = {
+    dark: 'linear-gradient(160deg,#0a1929 0%,#0e2440 50%,#071520 100%)',
+    warm: 'linear-gradient(160deg,#1a0f07 0%,#2a1810 50%,#1a0f07 100%)',
+    bright: 'linear-gradient(160deg,#f5f8ff 0%,#e8f0fb 100%)',
+    midnight: 'linear-gradient(160deg,#08081a 0%,#14082e 50%,#08081a 100%)',
+    forest: 'linear-gradient(160deg,#071a12 0%,#0d3020 50%,#071a12 100%)',
+    slate: 'linear-gradient(160deg,#0d1117 0%,#1c2333 50%,#0d1117 100%)'
+  };
+  document.body.style.background = bgMap[cfg.bg] || bgMap.dark;
+
+  // Text color based on bg
+  const isDark = cfg.bg !== 'bright';
+  const textColor = isDark ? '#fff' : '#1a1520';
+  document.body.style.color = textColor;
+
+  // Update font
+  const ff = cfg.font === 'jakarta' ? "'Plus Jakarta Sans',sans-serif" : "'Fraunces',serif";
+
+  // Render links
+  const linksWrap = document.getElementById('links-wrap');
+  if (linksWrap && cfg.links) {
+    const links = typeof cfg.links === 'string' ? JSON.parse(cfg.links) : cfg.links;
+    linksWrap.innerHTML = links.map((l, i) => {
+      const isConnect = l.lbl === "I'm New Here" || l.lbl === 'Connect Card';
+      const onclick = isConnect
+        ? `onclick="trackLink('${l.lbl.replace(/'/g, \"\\'\"")}','#',event);openConnect(event)"`
+        : `onclick="trackLink('${l.lbl.replace(/'/g, \"\\'\"")}','${l.url}',event)"`;
+      return `<button class="link-btn" ${onclick} style="animation-delay:${0.1+i*0.05}s;border-color:rgba(${isDark?'255,255,255':'0,0,0'},0.11);background:rgba(${isDark?'255,255,255':'0,0,0'},${isDark?'0.07':'0.05'})">
+        <div class="link-icon" style="background:${cfg.c1}22">${l.icon}</div>
+        <div class="link-text">
+          <div class="link-label" style="color:${textColor};font-family:${ff}">${l.lbl}</div>
+          <div class="link-sub" style="color:${textColor}">${l.sub || ''}</div>
+        </div>
+        <div class="link-arrow" style="color:${textColor}">›</div>
+      </button>`;
+    }).join('');
+  }
+
+  // Greeting
+  const greetings = {
+    lobby: "☕ Welcome! Grab a coffee and make yourself at home.",
+    kids: "🧒 Welcome to KBC Kids! Tap below to check in.",
+    outdoor: "👋 Welcome to KBC! We're glad you're here."
+  };
+  const gEl = document.getElementById('greeting');
+  if (gEl && greetings[circle]) {
+    gEl.textContent = greetings[circle];
+    gEl.classList.add('show');
+  }
+}
+
+function renderFallback() {
+  // Keep the hardcoded HTML as fallback — nothing to do
 }
 
 // ── CONNECT CARD ──────────────────────────────────────
@@ -315,33 +391,27 @@ function closeConnect() {
 
 function submitConnect() {
   const first = document.getElementById('cc-first').value.trim();
-  const last  = document.getElementById('cc-last').value.trim();
   const email = document.getElementById('cc-email').value.trim();
+  if (!first || !email) { alert('Please enter your first name and email.'); return; }
 
-  if (!first || !email) {
-    alert('Please enter your first name and email.');
-    return;
-  }
-
-  // Save to Supabase
   fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/connect_cards', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
-      'Prefer': 'return=minimal'
-    },
+    headers: { 'Content-Type': 'application/json', 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Prefer': 'return=minimal' },
     body: JSON.stringify({
-      first_name: first,
-      last_name: last,
-      email: email,
-      phone: document.getElementById('cc-phone').value,
+      first_name: first, last_name: document.getElementById('cc-last').value,
+      email, phone: document.getElementById('cc-phone').value,
       visit_count: document.getElementById('cc-visit').value,
       interest: document.getElementById('cc-interest').value,
-      circle: circle
+      circle
     })
   }).then(() => {
+    // Also notify via Netlify Forms
+    const fd = new FormData();
+    fd.append('form-name','connect-card');
+    fd.append('first-name',first);
+    fd.append('email',email);
+    fd.append('circle',circle);
+    fetch('/', {method:'POST',body:fd}).catch(()=>{});
     document.getElementById('cc-form-wrap').style.display = 'none';
     document.getElementById('cc-success').classList.add('show');
   }).catch(() => {
@@ -350,72 +420,44 @@ function submitConnect() {
   });
 }
 
-
-// ── SOCIAL MEDIA ICONS ────────────────────────────────
-const socials = {
-  facebook: { icon: '📘', label: 'Facebook' },
-  instagram: { icon: '📸', label: 'Instagram' },
-  youtube: { icon: '▶️', label: 'YouTube' },
-  twitter: { icon: '𝕏', label: 'Twitter' },
-  tiktok: { icon: '🎵', label: 'TikTok' },
-  podcast: { icon: '🎧', label: 'Podcast' }
-};
-
-const socialRow = document.getElementById('social-row');
-let hasSocial = false;
-
-Object.entries(socials).forEach(([key, val]) => {
-  const url = params.get(key);
-  if (url) {
-    hasSocial = true;
-    const a = document.createElement('a');
-    a.href = url;
-    a.target = '_blank';
-    a.className = 'social-icon';
-    a.textContent = val.icon;
-    a.title = val.label;
-    socialRow.appendChild(a);
-  }
-});
-
-if (hasSocial) {
-  socialRow.style.display = 'flex';
-}
-
-
 // ── LINK CLICK TRACKING ───────────────────────────────
 function trackLink(linkName, url, event) {
-  event.preventDefault();
+  if (event) event.preventDefault();
   fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/link_clicks', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
-      'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify({ circle: circle, link_name: linkName, clicked_at: new Date().toISOString() })
-  }).catch(() => {}).finally(() => {
+    headers: { 'Content-Type': 'application/json', 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Prefer': 'return=minimal' },
+    body: JSON.stringify({ circle, link_name: linkName, clicked_at: new Date().toISOString() })
+  }).catch(()=>{}).finally(() => {
     if (url && url !== '#') window.open(url, '_blank');
   });
 }
 
 // ── TAP ANALYTICS ─────────────────────────────────────
-// Log tap to Supabase
 fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/taps', {
   method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
-    'Prefer': 'return=minimal'
-  },
-  body: JSON.stringify({
-    circle: circle,
-    user_agent: navigator.userAgent,
-    referrer: document.referrer || ''
-  })
-}).catch(() => {}); // silent fail — never break the page
+  headers: { 'Content-Type': 'application/json', 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Prefer': 'return=minimal' },
+  body: JSON.stringify({ circle, user_agent: navigator.userAgent, referrer: document.referrer || '' })
+}).catch(()={});
+
+// ── SOCIAL MEDIA ──────────────────────────────────────
+const socialRow = document.getElementById('social-row');
+const socials = { facebook:'📘', instagram:'📸', youtube:'▶️', twitter:'𝕏', tiktok:'🎵', podcast:'🎧' };
+let hasSocial = false;
+Object.entries(socials).forEach(([key, icon]) => {
+  const url = params.get(key);
+  if (url) {
+    hasSocial = true;
+    const a = document.createElement('a');
+    a.href = url; a.target = '_blank'; a.className = 'social-icon';
+    a.textContent = icon;
+    socialRow.appendChild(a);
+  }
+});
+if (hasSocial) socialRow.style.display = 'flex';
+
+// ── START ─────────────────────────────────────────────
+loadCircle();
+
 </script>
 
 <!-- Netlify Forms detection tag (hidden) -->
