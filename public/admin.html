@@ -16,7 +16,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#070d14;color:#fff;he
 
 .app{display:flex;height:100vh;overflow:hidden;}
 .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0;}
-.scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.scroll{flex:1;overflow-y:auto;}
 
 /* SIDEBAR */
 .sidebar{
@@ -52,7 +52,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#070d14;color:#fff;he
 }
 
 /* VIEWS */
-.view{display:none;flex-direction:column;flex:1;min-height:0;}
+.view{display:none;flex-direction:column;flex:1;}
 .view.active{display:flex;}
 
 /* BUTTONS */
@@ -140,7 +140,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#070d14;color:#fff;he
 .atitle{font-size:11px;font-weight:700;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:18px;}
 .bchart{display:flex;align-items:flex-end;gap:6px;height:110px;}
 .bgrp{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
-.bcol{width:0%;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#39b5bc,rgba(57,181,188,0.2));transition:all 0.2s;cursor:pointer;}
+.bcol{width:100%;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#39b5bc,rgba(57,181,188,0.2));transition:all 0.2s;cursor:pointer;}
 .bcol:hover{background:linear-gradient(180deg,#f7c94b,rgba(247,201,75,0.2));}
 .bday{font-size:10px;color:rgba(255,255,255,0.28);}
 .tlist{display:flex;flex-direction:column;gap:14px;}
@@ -161,7 +161,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#070d14;color:#fff;he
 
 /* SUBMISSIONS */
 .subs-wrap{padding:0 32px 32px;}
-.subs-table{width:0%;border-collapse:collapse;}
+.subs-table{width:100%;border-collapse:collapse;}
 .subs-table th{
   text-align:left;padding:10px 14px;font-size:11px;font-weight:600;
   color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1px;
@@ -178,7 +178,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#070d14;color:#fff;he
 }
 
 /* EDITOR */
-.elayout{display:grid;grid-template-columns:1fr 260px;flex:1;overflow:hidden;min-height:0;}
+.elayout{display:grid;grid-template-columns:1fr 260px;flex:1;overflow:hidden;}
 .escroll{overflow-y:auto;padding:24px 24px 40px 32px;}
 .ephone{
   border-left:1px solid rgba(255,255,255,0.06);padding:24px 18px;
@@ -192,12 +192,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#070d14;color:#fff;he
   overflow:hidden;position:relative;flex-shrink:0;
 }
 .phone-sm-n{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:56px;height:14px;background:#111;border-radius:9px;z-index:10;}
-.phone-sm-i{width:150%;height:150%;transform:scale(0.667);transform-origin:top left;overflow:hidden;pointer-events:none;}
+.phone-sm-i{width:150%;height:150%;transform:scale(0.667);transform-origin:top left;overflow:hidden;}
 .ehint{font-size:10px;color:rgba(255,255,255,0.22);text-align:center;max-width:160px;line-height:1.55;}
 .es{margin-bottom:26px;}
 .est{font-size:10px;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,0.06);}
 .ilbl{font-size:11px;color:rgba(255,255,255,0.38);margin-bottom:4px;display:block;}
-.inp{width:0%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:9px 13px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;transition:border-color 0.2s;margin-bottom:9px;}
+.inp{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:9px 13px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;transition:border-color 0.2s;margin-bottom:9px;}
 .inp:focus{border-color:rgba(57,181,188,0.5);background:rgba(57,181,188,0.04);}
 .cgrid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px;}
 .csw{display:flex;align-items:center;gap:9px;padding:8px 11px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;cursor:pointer;transition:border-color 0.2s;}
@@ -233,10 +233,10 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
 /* PREVIEW */
 .ptbar{padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:#080f1c;}
 .ptitle{font-size:13px;font-weight:600;}
-.pfw{flex:1;display:flex;align-items:center;justify-content:center;padding:28px;overflow:hidden;min-height:0;background:#070d14;background-image:radial-gradient(circle at 50% 10%,rgba(57,181,188,0.08) 0%,transparent 55%);}
+.pfw{flex:1;display:flex;align-items:center;justify-content:center;padding:28px;overflow:hidden;background:#070d14;background-image:radial-gradient(circle at 50% 10%,rgba(57,181,188,0.08) 0%,transparent 55%);}
 .pf{width:300px;height:600px;background:#111;border-radius:42px;border:8px solid #1e2530;box-shadow:0 40px 80px rgba(0,0,0,0.7);overflow:hidden;position:relative;flex-shrink:0;}
 .pn{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:80px;height:20px;background:#111;border-radius:12px;z-index:10;}
-.pi{width:100%;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.pi{width:100%;height:100%;overflow-y:auto;}
 .pi::-webkit-scrollbar{display:none;}
 
 /* SETUP */
@@ -270,7 +270,7 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
 .toast.show{transform:translateX(-50%) translateY(0);}
 
 /* LP styles (mini preview) */
-.lp{width:0%;min-height:100%;display:flex;flex-direction:column;}
+.lp{width:100%;min-height:100%;display:flex;flex-direction:column;}
 .lp-dark{background:linear-gradient(160deg,#0a1929,#0e2440,#071520);}
 .lp-warm{background:linear-gradient(160deg,#1a0f07,#2a1810,#1a0f07);}
 .lp-bright{background:linear-gradient(160deg,#f5f8ff,#e8f0fb);}
@@ -279,15 +279,15 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
 .lp-slate{background:linear-gradient(160deg,#0d1117,#1c2333,#0d1117);}
 .lph{padding:52px 18px 20px;text-align:center;}
 .lplo{width:68px;height:68px;border-radius:20px;margin:0 auto 13px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:24px;font-weight:900;box-shadow:0 12px 36px rgba(0,0,0,0.35);}
-.lpn{font-family:'Fraunces',serif;font-size:15px;font-weight:700;line-height:1.25;}
+.lpn{font-family:'Fraunces',serif;font-size:20px;font-weight:700;line-height:1.2;}
 .lpt{font-size:11px;margin-top:3px;font-style:italic;opacity:0.5;}
-.lpls{padding:6px 14px 20px;display:flex;flex-direction:column;gap:8px;width:100%;}
-.lpb{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.11);background:rgba(255,255,255,0.07);color:#fff;text-align:left;transition:all 0.18s;cursor:pointer;width:100%;min-width:0;}
+.lpls{padding:6px 14px 20px;display:flex;flex-direction:column;gap:8px;}
+.lpb{display:flex;align-items:center;gap:11px;padding:13px 14px;border-radius:15px;border:1px solid rgba(255,255,255,0.11);background:rgba(255,255,255,0.07);color:#fff;text-align:left;transition:all 0.18s;cursor:pointer;}
 .lpb-br{background:rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.1);color:#1a1520;}
-.lpi{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.lpi{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
 .lptx{flex:1;min-width:0;}
-.lpl{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.lps{font-size:10px;opacity:0.5;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lpl{font-size:13px;font-weight:600;}
+.lps{font-size:10px;opacity:0.5;margin-top:1px;}
 .lpar{opacity:0.3;font-size:14px;flex-shrink:0;}
 .lpf{text-align:center;font-size:9px;opacity:0.2;padding-bottom:20px;letter-spacing:1px;text-transform:uppercase;margin-top:auto;padding-top:8px;}
 </style>
@@ -321,7 +321,7 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
       <!-- DASHBOARD -->
       <div class="view active" id="view-dashboard">
         <div class="pg-hdr">
-          <div><div class="pg-title">KBC Circles</div><div class="pg-sub">Kennebecasis Baptist Church · 0 active</div></div>
+          <div><div class="pg-title">KBC Circles</div><div class="pg-sub">Kennebecasis Baptist Church · 3 active</div></div>
           <div style="display:flex;gap:9px">
             <a class="btn-g" href="/index.html" target="_blank">🔗 View Live Site</a>
             <button class="btn-p" onclick="document.getElementById('mnew').classList.add('show')">
@@ -331,15 +331,15 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
           </div>
         </div>
         <div class="stats">
-          <div class="stat" style="--a:#39b5bc"><div class="sv">0</div><div class="sl">Total All-Time Taps</div><div class="st">No taps yet</div></div>
-          <div class="stat" style="--a:#f7c94b"><div class="sv">0</div><div class="sl">Taps This Week</div><div class="st">No data yet</div></div>
-          <div class="stat" style="--a:#4ade80"><div class="sv">0</div><div class="sl">Active Circles</div><div class="st">of 4 total</div></div>
-          <div class="stat" style="--a:#9b72cb"><div class="sv">—</div><div class="sl">Connect Card Rate</div><div class="st">No data yet</div></div>
+          <div class="stat" style="--a:#39b5bc"><div class="sv">2,022</div><div class="sl">Total All-Time Taps</div><div class="st">↑ All circles</div></div>
+          <div class="stat" style="--a:#f7c94b"><div class="sv">341</div><div class="sl">Taps This Week</div><div class="st">↑ 14% vs last week</div></div>
+          <div class="stat" style="--a:#4ade80"><div class="sv">3</div><div class="sl">Active Circles</div><div class="st">of 4 total</div></div>
+          <div class="stat" style="--a:#9b72cb"><div class="sv">68%</div><div class="sl">Connect Card Rate</div><div class="st">↑ 3% vs last week</div></div>
         </div>
         <div class="sec-hdr">
           <div class="sec-t">Your Circles</div>
           <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:8px;background:rgba(74,222,128,0.12);color:#4ade80;font-size:11px;font-weight:600;">
-            <span class="sdot live" style="display:inline-block"></span> 0 Live
+            <span class="sdot live" style="display:inline-block"></span> 3 Live
           </span>
         </div>
         <div class="cgrid">
@@ -347,11 +347,11 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
             <div class="ct"><span class="cbadge">🪑 Chair</span><div class="swrap"><span class="sdot live"></span><span class="stxt">Active</span></div></div>
             <div class="cn">Main Auditorium</div><div class="cl">📍 Back of every chair</div>
             <div class="cstats">
-              <div><div class="csv">0</div><div class="csl">Total Taps</div></div>
-              <div><div class="csv" style="color:#4ade80;font-size:15px">—</div><div class="csl">This Week</div></div>
+              <div><div class="csv">1,284</div><div class="csl">Total Taps</div></div>
+              <div><div class="csv" style="color:#4ade80;font-size:15px">↑18%</div><div class="csl">This Week</div></div>
               <div class="mc" id="mc1"></div>
             </div>
-            <div class="clast">No taps yet</div>
+            <div class="clast">Last tap: 2 min ago</div>
             <div class="cacts">
               <button class="ab pv" onclick="showPrev('auditorium')">👁 Preview</button>
               <button class="ab" onclick="showEd('auditorium')">✏️ Edit</button>
@@ -362,11 +362,11 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
             <div class="ct"><span class="cbadge">☕ Lobby</span><div class="swrap"><span class="sdot live"></span><span class="stxt">Active</span></div></div>
             <div class="cn">Lobby & Café</div><div class="cl">📍 Café counter & welcome table</div>
             <div class="cstats">
-              <div><div class="csv">0</div><div class="csl">Total Taps</div></div>
-              <div><div class="csv" style="color:#4ade80;font-size:15px">—</div><div class="csl">This Week</div></div>
+              <div><div class="csv">432</div><div class="csl">Total Taps</div></div>
+              <div><div class="csv" style="color:#4ade80;font-size:15px">↑8%</div><div class="csl">This Week</div></div>
               <div class="mc" id="mc2"></div>
             </div>
-            <div class="clast">No taps yet</div>
+            <div class="clast">Last tap: 14 min ago</div>
             <div class="cacts">
               <button class="ab pv" onclick="showPrev('lobby')">👁 Preview</button>
               <button class="ab" onclick="showEd('lobby')">✏️ Edit</button>
@@ -377,11 +377,11 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
             <div class="ct"><span class="cbadge">🧒 Kids</span><div class="swrap"><span class="sdot live"></span><span class="stxt">Active</span></div></div>
             <div class="cn">KBC Kids Wing</div><div class="cl">📍 Kids check-in entrance</div>
             <div class="cstats">
-              <div><div class="csv">0</div><div class="csl">Total Taps</div></div>
-              <div><div class="csv" style="color:#4ade80;font-size:15px">—</div><div class="csl">This Week</div></div>
+              <div><div class="csv">219</div><div class="csl">Total Taps</div></div>
+              <div><div class="csv" style="color:#4ade80;font-size:15px">↑5%</div><div class="csl">This Week</div></div>
               <div class="mc" id="mc3"></div>
             </div>
-            <div class="clast">No taps yet</div>
+            <div class="clast">Last tap: 1 hr ago</div>
             <div class="cacts">
               <button class="ab pv" onclick="showPrev('kids')">👁 Preview</button>
               <button class="ab" onclick="showEd('kids')">✏️ Edit</button>
@@ -392,11 +392,11 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
             <div class="ct"><span class="cbadge">🚪 Outdoor</span><div class="swrap"><span class="sdot off"></span><span class="stxt">Inactive</span></div></div>
             <div class="cn">Parking Lot Welcome</div><div class="cl">📍 Main entrance</div>
             <div class="cstats">
-              <div><div class="csv">0</div><div class="csl">Total Taps</div></div>
-              <div><div class="csv" style="color:#f87171;font-size:15px">—</div><div class="csl">This Week</div></div>
+              <div><div class="csv">87</div><div class="csl">Total Taps</div></div>
+              <div><div class="csv" style="color:#f87171;font-size:15px">↓2%</div><div class="csl">This Week</div></div>
               <div class="mc" id="mc4"></div>
             </div>
-            <div class="clast">No taps yet</div>
+            <div class="clast">Last tap: 3 hrs ago</div>
             <div class="cacts">
               <button class="ab pv" onclick="showPrev('auditorium')">👁 Preview</button>
               <button class="ab" onclick="showEd('auditorium')">✏️ Edit</button>
@@ -413,10 +413,10 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
           <div style="display:flex;gap:9px"><button class="btn-g">This Week ▾</button><button class="btn-g">Export CSV</button></div>
         </div>
         <div class="stats">
-          <div class="stat" style="--a:#39b5bc"><div class="sv">0</div><div class="sl">Total All-Time Taps</div><div class="st">No taps yet</div></div>
-          <div class="stat" style="--a:#f7c94b"><div class="sv">0</div><div class="sl">Taps This Week</div><div class="st">No data yet</div></div>
-          <div class="stat" style="--a:#4ade80"><div class="sv">0</div><div class="sl">Active Circles</div><div class="st">of 4 total</div></div>
-          <div class="stat" style="--a:#9b72cb"><div class="sv">—</div><div class="sl">Connect Card Rate</div><div class="st">No data yet</div></div>
+          <div class="stat" style="--a:#39b5bc"><div class="sv">2,022</div><div class="sl">Total All-Time Taps</div><div class="st">↑ All circles</div></div>
+          <div class="stat" style="--a:#f7c94b"><div class="sv">341</div><div class="sl">Taps This Week</div><div class="st">↑ 14% vs last week</div></div>
+          <div class="stat" style="--a:#4ade80"><div class="sv">3</div><div class="sl">Active Circles</div><div class="st">of 4 total</div></div>
+          <div class="stat" style="--a:#9b72cb"><div class="sv">68%</div><div class="sl">Connect Card Rate</div><div class="st">↑ 3% vs last week</div></div>
         </div>
         <div class="awrap">
           <div class="agrid">
@@ -424,19 +424,19 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
               <div class="atitle">Weekly Tap Volume</div>
               <div class="bchart" id="mchart"></div>
               <div style="display:flex;gap:16px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06)">
-                <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Auditorium</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">0</div></div>
-                <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Lobby</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">0</div></div>
-                <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Kids</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">0</div></div>
+                <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Auditorium</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">208</div></div>
+                <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Lobby</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">82</div></div>
+                <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Kids</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">44</div></div>
                 <div><div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">Outdoor</div><div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">7</div></div>
               </div>
             </div>
             <div class="acard">
               <div class="atitle">Top Circles</div>
               <div class="tlist">
-                <div class="trow"><div class="trank">1</div><div class="tinfo"><div class="tname">Auditorium</div><div class="tloc">Chair Circle</div><div class="tbar"><div class="tfill" style="width:0%"></div></div></div><div class="ttaps">0</div></div>
-                <div class="trow"><div class="trank">2</div><div class="tinfo"><div class="tname">Lobby & Café</div><div class="tloc">Lobby Circle</div><div class="tbar"><div class="tfill" style="width:0%"></div></div></div><div class="ttaps">0</div></div>
-                <div class="trow"><div class="trank">0</div><div class="tinfo"><div class="tname">Kids Wing</div><div class="tloc">Kids Check-In</div><div class="tbar"><div class="tfill" style="width:0%"></div></div></div><div class="ttaps">0</div></div>
-                <div class="trow"><div class="trank">4</div><div class="tinfo"><div class="tname">Entrance</div><div class="tloc">Parking Lot</div><div class="tbar"><div class="tfill" style="width:0%"></div></div></div><div class="ttaps">0</div></div>
+                <div class="trow"><div class="trank">1</div><div class="tinfo"><div class="tname">Auditorium</div><div class="tloc">Chair Circle</div><div class="tbar"><div class="tfill" style="width:100%"></div></div></div><div class="ttaps">1,284</div></div>
+                <div class="trow"><div class="trank">2</div><div class="tinfo"><div class="tname">Lobby & Café</div><div class="tloc">Lobby Circle</div><div class="tbar"><div class="tfill" style="width:34%"></div></div></div><div class="ttaps">432</div></div>
+                <div class="trow"><div class="trank">3</div><div class="tinfo"><div class="tname">Kids Wing</div><div class="tloc">Kids Check-In</div><div class="tbar"><div class="tfill" style="width:17%"></div></div></div><div class="ttaps">219</div></div>
+                <div class="trow"><div class="trank">4</div><div class="tinfo"><div class="tname">Entrance</div><div class="tloc">Parking Lot</div><div class="tbar"><div class="tfill" style="width:7%"></div></div></div><div class="ttaps">87</div></div>
               </div>
             </div>
           </div>
@@ -444,12 +444,12 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
             <div class="acard">
               <div class="atitle">Most Tapped Links</div>
               <div class="lgrid">
-                <div class="lstat"><div class="licon">📋</div><div class="lpct" style="color:#39b5bc">—</div><div class="lname">Connect Card</div><div class="ltaps">0 taps</div></div>
-                <div class="lstat"><div class="licon">💛</div><div class="lpct" style="color:#f7c94b">—</div><div class="lname">Give Online</div><div class="ltaps">0 taps</div></div>
-                <div class="lstat"><div class="licon">▶️</div><div class="lpct" style="color:#5b8ff9">—</div><div class="lname">Watch Online</div><div class="ltaps">0 taps</div></div>
-                <div class="lstat"><div class="licon">👋</div><div class="lpct" style="color:#4ade80">—</div><div class="lname">I'm New Here</div><div class="ltaps">0 taps</div></div>
-                <div class="lstat"><div class="licon">🙏</div><div class="lpct" style="color:#9b72cb">—</div><div class="lname">Prayer Request</div><div class="ltaps">0 taps</div></div>
-                <div class="lstat"><div class="licon">📅</div><div class="lpct" style="color:#f07b54">—</div><div class="lname">Events</div><div class="ltaps">0 taps</div></div>
+                <div class="lstat"><div class="licon">📋</div><div class="lpct" style="color:#39b5bc">68%</div><div class="lname">Connect Card</div><div class="ltaps">872 taps</div></div>
+                <div class="lstat"><div class="licon">💛</div><div class="lpct" style="color:#f7c94b">54%</div><div class="lname">Give Online</div><div class="ltaps">692 taps</div></div>
+                <div class="lstat"><div class="licon">▶️</div><div class="lpct" style="color:#5b8ff9">47%</div><div class="lname">Watch Online</div><div class="ltaps">601 taps</div></div>
+                <div class="lstat"><div class="licon">👋</div><div class="lpct" style="color:#4ade80">41%</div><div class="lname">I'm New Here</div><div class="ltaps">524 taps</div></div>
+                <div class="lstat"><div class="licon">🙏</div><div class="lpct" style="color:#9b72cb">28%</div><div class="lname">Prayer Request</div><div class="ltaps">358 taps</div></div>
+                <div class="lstat"><div class="licon">📅</div><div class="lpct" style="color:#f07b54">22%</div><div class="lname">Events</div><div class="ltaps">281 taps</div></div>
               </div>
             </div>
           </div>
@@ -476,12 +476,12 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
                 </tr>
               </thead>
               <tbody>
-                
-                
-                
-                
-                
-                
+                <tr><td>Sarah M.</td><td>sarah@email.com</td><td><span class="sub-badge">Auditorium</span></td><td>First time!</td><td>Learn more about KBC</td><td>Apr 20</td></tr>
+                <tr><td>James & Lisa P.</td><td>jplismore@gmail.com</td><td><span class="sub-badge">Lobby</span></td><td>2–3 times</td><td>Getting connected to a group</td><td>Apr 20</td></tr>
+                <tr><td>David K.</td><td>dk1988@hotmail.com</td><td><span class="sub-badge">Auditorium</span></td><td>First time!</td><td>Speaking with a pastor</td><td>Apr 20</td></tr>
+                <tr><td>Aisha T.</td><td>aisha.t@gmail.com</td><td><span class="sub-badge">Kids</span></td><td>Regular</td><td>Volunteering</td><td>Apr 13</td></tr>
+                <tr><td>Mike R.</td><td>miker@rogers.com</td><td><span class="sub-badge">Auditorium</span></td><td>2–3 times</td><td>Baptism</td><td>Apr 13</td></tr>
+                <tr><td>Emma W.</td><td>emmawilson@bell.net</td><td><span class="sub-badge">Auditorium</span></td><td>First time!</td><td>Learn more about KBC</td><td>Apr 6</td></tr>
               </tbody>
             </table>
           </div>
@@ -500,7 +500,7 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
               <div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:4px;">🧒 Kids URL</div><div class="url-box">https://kbc.churchcircle.app/?circle=kids</div></div>
             </div>
           </div></div></div>
-          <div class="scard"><div class="sstep"><div class="snum">0</div><div class="sinfo"><div class="stitle">Stick & deploy</div><div class="sdesc">Place tags centre-bottom of seat backs. Add a small printed label above that says <em>"Tap to connect →"</em> — this alone doubles your tap rate.<br><br>For lobby, stick to the café counter edge or on a small acrylic stand.</div></div></div></div>
+          <div class="scard"><div class="sstep"><div class="snum">3</div><div class="sinfo"><div class="stitle">Stick & deploy</div><div class="sdesc">Place tags centre-bottom of seat backs. Add a small printed label above that says <em>"Tap to connect →"</em> — this alone doubles your tap rate.<br><br>For lobby, stick to the café counter edge or on a small acrylic stand.</div></div></div></div>
           <div class="scard"><div class="sstep"><div class="snum">4</div><div class="sinfo"><div class="stitle">Update links remotely anytime</div><div class="sdesc">The tag URL never changes. When you edit a circle here and hit Save, it updates instantly for every person who taps — no touching the physical tags ever again.<br><br>Swap links for special events, update your giving campaign, or turn circles off temporarily — all from this dashboard.</div></div></div></div>
         </div>
       </div>
@@ -570,37 +570,33 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
             <div class="es">
               <div class="est">Links</div>
               <div class="llist" id="ell"></div>
-              <button class="btn-g" style="width:0%;justify-content:center" onclick="addL()">+ Add Link</button>
+              <button class="btn-g" style="width:100%;justify-content:center" onclick="addL()">+ Add Link</button>
             </div>
             <div class="es">
               <div class="est">Social Media</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px" id="social-links">
-                <div style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;">
-                  <span style="font-size:16px">📘</span>
-                  <input class="inp" style="margin:0;padding:5px 8px;font-size:11px" placeholder="Facebook URL" id="s-facebook">
+              <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:16px;width:22px;text-align:center">📘</span>
+                  <input class="inp" style="margin:0" placeholder="Facebook URL" id="s-fb">
                 </div>
-                <div style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;">
-                  <span style="font-size:16px">📸</span>
-                  <input class="inp" style="margin:0;padding:5px 8px;font-size:11px" placeholder="Instagram URL" id="s-instagram">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:16px;width:22px;text-align:center">📸</span>
+                  <input class="inp" style="margin:0" placeholder="Instagram URL" id="s-ig">
                 </div>
-                <div style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;">
-                  <span style="font-size:16px">▶️</span>
-                  <input class="inp" style="margin:0;padding:5px 8px;font-size:11px" placeholder="YouTube URL" id="s-youtube">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:16px;width:22px;text-align:center">▶️</span>
+                  <input class="inp" style="margin:0" placeholder="YouTube URL" id="s-yt">
                 </div>
-                <div style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;">
-                  <span style="font-size:16px">𝕏</span>
-                  <input class="inp" style="margin:0;padding:5px 8px;font-size:11px" placeholder="X / Twitter URL" id="s-twitter">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:16px;width:22px;text-align:center">🎵</span>
+                  <input class="inp" style="margin:0" placeholder="TikTok URL" id="s-tt">
                 </div>
-                <div style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;">
-                  <span style="font-size:16px">🎵</span>
-                  <input class="inp" style="margin:0;padding:5px 8px;font-size:11px" placeholder="TikTok URL" id="s-tiktok">
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;padding:8px 11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;">
-                  <span style="font-size:16px">🎧</span>
-                  <input class="inp" style="margin:0;padding:5px 8px;font-size:11px" placeholder="Podcast URL" id="s-podcast">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:16px;width:22px;text-align:center">🎧</span>
+                  <input class="inp" style="margin:0" placeholder="Podcast URL" id="s-pod">
                 </div>
               </div>
-              <div style="font-size:11px;color:rgba(255,255,255,0.28)">Leave blank to hide. Shown as icon row at bottom of landing page.</div>
+              <div style="font-size:11px;color:rgba(255,255,255,0.28);line-height:1.5">Leave blank to hide. Shows as icon row at bottom of landing page.</div>
             </div>
             <div class="es">
               <div class="est">Settings</div>
@@ -664,8 +660,8 @@ const CIRCLES={
     {icon:'👨‍👩‍👧',lbl:'Volunteer',sub:'Serve on the kids team',url:'https://www.kbconline.ca'},
   ]}
 };
-const MD={mc1:[0,0,0,0,0,0,0],mc2:[0,0,0,0,0,0,0],mc3:[0,0,0,0,0,0,0],mc4:[0,0,0,0,0,0,0]};
-const MAIN=[0,0,0,0,0,0,0];
+const MD={mc1:[42,55,38,71,90,120,88],mc2:[12,18,9,24,30,44,28],mc3:[8,10,6,14,18,22,14],mc4:[2,3,1,5,8,6,4]};
+const MAIN=[54,74,54,114,146,192,134];
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 let eBg='dark',eFont='fraunces',eC={c1:'#39b5bc',c2:'#2d8c92',c3:'#f7c94b',c4:'#39b5bc'};
 
@@ -741,7 +737,33 @@ function lp(){
 function uc(n,v){eC['c'+n]=v;document.getElementById('sw'+n).style.background=v;document.getElementById('hx'+n).textContent=v;lp();}
 function sbg(el,bg){eBg=bg;document.querySelectorAll('.bgopt').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');lp();}
 function sf(el,f){eFont=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');lp();}
-function addL(){const e=['🌟','📣','🎉','🤝','💬','📰','✝️','🙌'];const ico=e[Math.floor(Math.random()*e.length)];const d=document.createElement('div');d.className='li';d.innerHTML=`<span class="liico">${ico}</span><div class="liinf"><div class="linm">New Link</div><div class="liub">https://</div></div><button class="lidel" onclick="this.closest('.li').remove();lp()">✕</button>`;document.getElementById('ell').appendChild(d);lp();}
+function addL(){
+  const d=document.createElement('div');
+  d.className='li';
+  d.innerHTML=`
+    <div style="display:flex;align-items:center;gap:9px;width:100%">
+      <span class="liico" style="font-size:18px;cursor:pointer" onclick="cycleIcon(this)" title="Click to change icon">🌟</span>
+      <div class="liinf" style="flex:1;display:flex;flex-direction:column;gap:5px">
+        <input style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;color:#fff;font-size:12px;outline:none;font-family:'Plus Jakarta Sans',sans-serif;width:100%" placeholder="Label e.g. Give Online" oninput="this.closest('.li').querySelector('.linm').textContent=this.value;lp()">
+        <input style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;color:#fff;font-size:12px;outline:none;font-family:'Plus Jakarta Sans',sans-serif;width:100%" placeholder="URL e.g. https://kbconline.ca/give" oninput="this.closest('.li').querySelector('.liub').textContent=this.value;lp()">
+      </div>
+      <button class="lidel" onclick="this.closest('.li').remove();lp()">✕</button>
+    </div>
+    <div class="linm" style="display:none">New Link</div>
+    <div class="liub" style="display:none">https://</div>`;
+  document.getElementById('ell').appendChild(d);
+  d.querySelector('input').focus();
+  lp();
+}
+
+const ALL_ICONS = ['👋','📋','▶️','🙏','💛','📅','🌟','📣','🎉','🤝','💬','📰','✝️','🙌','🎵','📸','🎧','🏠','📖','🙋','☕','✅','🎤','🌍','💌','🔔','🗓️','⛪','🙏'];
+function cycleIcon(el){
+  const cur = el.textContent;
+  const idx = ALL_ICONS.indexOf(cur);
+  el.textContent = ALL_ICONS[(idx+1) % ALL_ICONS.length];
+  el.closest('.li').querySelector('.liico') && (el.closest('.li').querySelector('.liico').textContent = el.textContent);
+  lp();
+}
 function saveIt(){const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 function closeM(){document.getElementById('mnew').classList.remove('show');}
 
@@ -755,216 +777,154 @@ const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 
 async function sbFetch(endpoint) {
   const res = await fetch(SB_URL + endpoint, {
-    headers: {
-      'apikey': SB_KEY,
-      'Authorization': 'Bearer ' + SB_KEY
-    }
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
   });
   return res.json();
 }
 
 async function loadLiveData() {
   try {
-    // Fetch all taps
     const taps = await sbFetch('/rest/v1/taps?select=circle,tapped_at&order=tapped_at.desc');
+    if (!taps || taps.length === 0) { return; }
 
-    if (!taps || taps.length === 0) {
-      setAllZero();
-      return;
-    }
-
-    // Total taps
     const total = taps.length;
-
-    // Taps per circle
     const byCircle = {};
-    taps.forEach(t => {
-      byCircle[t.circle] = (byCircle[t.circle] || 0) + 1;
-    });
+    taps.forEach(t => { byCircle[t.circle] = (byCircle[t.circle] || 0) + 1; });
 
-    // This week taps
     const weekAgo = new Date(Date.now() - 7*24*60*60*1000);
     const weekTaps = taps.filter(t => new Date(t.tapped_at) > weekAgo);
     const weekTotal = weekTaps.length;
+    const weekByCircle = {};
+    weekTaps.forEach(t => { weekByCircle[t.circle] = (weekByCircle[t.circle] || 0) + 1; });
 
-    // Last tap times per circle
     const lastTap = {};
-    taps.forEach(t => {
-      if (!lastTap[t.circle]) lastTap[t.circle] = t.tapped_at;
-    });
+    taps.forEach(t => { if (!lastTap[t.circle]) lastTap[t.circle] = t.tapped_at; });
 
-    // Week taps by day (for chart)
     const dayTotals = [0,0,0,0,0,0,0];
     weekTaps.forEach(t => {
-      const d = new Date(t.tapped_at);
-      const dayIdx = (d.getDay() + 6) % 7; // Mon=0
+      const dayIdx = (new Date(t.tapped_at).getDay() + 6) % 7;
       dayTotals[dayIdx]++;
-    });
-
-    // Taps per circle this week
-    const weekByCircle = {};
-    weekTaps.forEach(t => {
-      weekByCircle[t.circle] = (weekByCircle[t.circle] || 0) + 1;
-    });
-
-    // Connect cards
-    // Fetch link clicks
-    const clicks = await sbFetch('/rest/v1/link_clicks?select=link_name&order=clicked_at.desc');
-    const clickCounts = {};
-    if (clicks && clicks.length) {
-      clicks.forEach(cl => {
-        clickCounts[cl.link_name] = (clickCounts[cl.link_name] || 0) + 1;
-      });
-    }
-    const totalClicks = Object.values(clickCounts).reduce((a,b) => a+b, 0);
-
-    // Update Most Tapped Links
-    const linkNames = ['Connect Card', 'Give Online', 'Watch Online', "I'm New Here", 'Prayer Request', 'Events'];
-    const linkPctEls = document.querySelectorAll('.lpct');
-    const linkTapEls = document.querySelectorAll('.ltaps');
-    linkNames.forEach((name, i) => {
-      const count = clickCounts[name] || 0;
-      const pct = totalClicks > 0 ? Math.round((count / totalClicks) * 100) : 0;
-      if (linkPctEls[i]) linkPctEls[i].textContent = pct > 0 ? pct + '%' : '—';
-      if (linkTapEls[i]) linkTapEls[i].textContent = count + ' taps';
     });
 
     const cards = await sbFetch('/rest/v1/connect_cards?select=*&order=submitted_at.desc');
     const cardCount = cards ? cards.length : 0;
     const connectRate = total > 0 ? Math.round((cardCount / total) * 100) : 0;
 
-    // ── UPDATE DASHBOARD STATS ──
-    document.querySelectorAll('.sv').forEach((el, i) => {
-      if (i === 0) el.textContent = total.toLocaleString();
-      if (i === 1) el.textContent = weekTotal.toLocaleString();
-      if (i === 2) el.textContent = '3';
-      if (i === 3) el.textContent = connectRate + '%';
-      // Analytics view stats (duplicate set)
-      if (i === 4) el.textContent = total.toLocaleString();
-      if (i === 5) el.textContent = weekTotal.toLocaleString();
-      if (i === 6) el.textContent = '3';
-      if (i === 7) el.textContent = connectRate + '%';
-    });
+    // Update all stat values
+    const svEls = document.querySelectorAll('.sv');
+    const statData = [total.toLocaleString(), weekTotal.toLocaleString(), '3', connectRate+'%',
+                      total.toLocaleString(), weekTotal.toLocaleString(), '3', connectRate+'%'];
+    svEls.forEach((el, i) => { if (statData[i] !== undefined) el.textContent = statData[i]; });
 
-    // ── UPDATE CIRCLE CARDS ──
+    // Update circle tap counts
     const circles = ['auditorium','lobby','kids','outdoor'];
-    const circleEls = document.querySelectorAll('.csv');
-    circles.forEach((c, i) => {
-      if (circleEls[i*2]) circleEls[i*2].textContent = (byCircle[c] || 0).toLocaleString();
-      if (circleEls[i*2+1]) {
-        const wk = weekByCircle[c] || 0;
-        circleEls[i*2+1].textContent = wk > 0 ? wk + ' this wk' : '—';
-        circleEls[i*2+1].style.color = wk > 0 ? '#4ade80' : 'rgba(255,255,255,0.3)';
-        circleEls[i*2+1].style.fontSize = '13px';
+    const csvEls = document.querySelectorAll('.csv');
+    circles.forEach((cir, i) => {
+      if (csvEls[i*2]) csvEls[i*2].textContent = (byCircle[cir]||0).toLocaleString();
+      if (csvEls[i*2+1]) {
+        const wk = weekByCircle[cir]||0;
+        csvEls[i*2+1].textContent = wk > 0 ? '↑'+wk+' wk' : '—';
+        csvEls[i*2+1].style.color = wk > 0 ? '#4ade80' : 'rgba(255,255,255,0.3)';
       }
     });
 
-    // ── UPDATE LAST TAP TIMES ──
+    // Update last tap times
     document.querySelectorAll('.clast').forEach((el, i) => {
-      const c = circles[i];
-      if (lastTap[c]) {
-        el.textContent = 'Last tap: ' + timeAgo(lastTap[c]);
-      } else {
-        el.textContent = 'No taps yet';
-      }
+      const cir = circles[i];
+      el.textContent = lastTap[cir] ? 'Last tap: ' + timeAgo(lastTap[cir]) : 'No taps yet';
     });
 
-    // ── UPDATE MINI CHARTS ──
-    const circleWeekData = {};
-    circles.forEach(c => {
-      circleWeekData[c] = [0,0,0,0,0,0,0];
-    });
+    // Update mini charts
+    const circleWeek = {};
+    circles.forEach(cir => { circleWeek[cir] = [0,0,0,0,0,0,0]; });
     weekTaps.forEach(t => {
-      if (circles.includes(t.circle)) {
-        const d = new Date(t.tapped_at);
-        const dayIdx = (d.getDay() + 6) % 7;
-        circleWeekData[t.circle][dayIdx]++;
-      }
+      if (circles.includes(t.circle)) circleWeek[t.circle][(new Date(t.tapped_at).getDay()+6)%7]++;
     });
-    circles.forEach((c, i) => {
+    circles.forEach((cir, i) => {
       const el = document.getElementById('mc'+(i+1));
       if (!el) return;
-      const data = circleWeekData[c];
+      const data = circleWeek[cir];
       const mx = Math.max(...data, 1);
       el.innerHTML = data.map((v,j) =>
         `<div class="mb${v===Math.max(...data)&&v>0?' pk':''}" style="height:${Math.max(2,(v/mx)*28)}px"></div>`
       ).join('');
     });
 
-    // ── UPDATE ANALYTICS CHART ──
+    // Update bar chart
     const mc = document.getElementById('mchart');
     if (mc) {
       const mx = Math.max(...dayTotals, 1);
       mc.innerHTML = dayTotals.map((v,i) =>
-        `<div class="bgrp"><div class="bcol" style="height:${Math.max(2,(v/mx)*100)}px" title="${v} taps"></div><span class="bday">${DAYS[i]}</span></div>`
+        `<div class="bgrp"><div class="bcol" style="height:${Math.max(2,(v/mx)*100)}px"></div><span class="bday">${DAYS[i]}</span></div>`
       ).join('');
     }
 
-    // ── UPDATE ANALYTICS WEEKLY BREAKDOWN ──
-    const breakdownEls = document.querySelectorAll('.awrap [style*="font-size:17px"]');
-    if (breakdownEls.length >= 4) {
-      breakdownEls[0].textContent = (weekByCircle['auditorium']||0);
-      breakdownEls[1].textContent = (weekByCircle['lobby']||0);
-      breakdownEls[2].textContent = (weekByCircle['kids']||0);
-      breakdownEls[3].textContent = (weekByCircle['outdoor']||0);
+    // Update analytics weekly breakdown
+    const bkEls = document.querySelectorAll('.awrap [style*="font-size:17px"]');
+    if (bkEls.length >= 4) {
+      ['auditorium','lobby','kids','outdoor'].forEach((cir,i) => {
+        bkEls[i].textContent = weekByCircle[cir]||0;
+      });
     }
 
-    // ── UPDATE TOP CIRCLES ──
-    const sortedCircles = [...circles].sort((a,b) => (byCircle[b]||0) - (byCircle[a]||0));
-    const topTaps = document.querySelectorAll('.ttaps');
-    const topFills = document.querySelectorAll('.tfill');
-    const maxTaps = Math.max(...circles.map(c => byCircle[c]||0), 1);
-    sortedCircles.forEach((c, i) => {
-      if (topTaps[i]) topTaps[i].textContent = (byCircle[c]||0).toLocaleString();
-      if (topFills[i]) topFills[i].style.width = Math.round(((byCircle[c]||0)/maxTaps)*100) + '%';
+    // Top circles
+    const sorted = [...circles].sort((a,b)=>(byCircle[b]||0)-(byCircle[a]||0));
+    const maxT = Math.max(...circles.map(cir=>byCircle[cir]||0), 1);
+    document.querySelectorAll('.ttaps').forEach((el,i) => {
+      if (sorted[i]) el.textContent = (byCircle[sorted[i]]||0).toLocaleString();
+    });
+    document.querySelectorAll('.tfill').forEach((el,i) => {
+      if (sorted[i]) el.style.width = Math.round(((byCircle[sorted[i]]||0)/maxT)*100)+'%';
     });
 
-    // ── UPDATE CONNECT CARDS TABLE ──
+    // Link click stats
+    const clicks = await sbFetch('/rest/v1/link_clicks?select=link_name');
+    if (clicks && clicks.length) {
+      const cc = {};
+      clicks.forEach(cl => { cc[cl.link_name] = (cc[cl.link_name]||0)+1; });
+      const tot = Object.values(cc).reduce((a,b)=>a+b,0);
+      const names = ['Connect Card','Give Online','Watch Online',"I'm New Here",'Prayer Request','Events'];
+      document.querySelectorAll('.lpct').forEach((el,i) => {
+        const cnt = cc[names[i]]||0;
+        el.textContent = tot>0 ? Math.round((cnt/tot)*100)+'%' : '—';
+      });
+      document.querySelectorAll('.ltaps').forEach((el,i) => {
+        el.textContent = (cc[names[i]]||0)+' taps';
+      });
+    }
+
+    // Connect cards table
     if (cards && cards.length > 0) {
       const tbody = document.querySelector('.subs-table tbody');
       if (tbody) {
-        tbody.innerHTML = cards.slice(0,20).map(card => `
+        tbody.innerHTML = cards.slice(0,50).map(card => `
           <tr>
             <td>${card.first_name||''} ${card.last_name||''}</td>
             <td>${card.email||''}</td>
-            <td><span class="sub-badge">${cap(card.circle||'')}</span></td>
+            <td><span class="sub-badge">${(card.circle||'').charAt(0).toUpperCase()+(card.circle||'').slice(1)}</span></td>
             <td>${card.visit_count||''}</td>
             <td>${card.interest||''}</td>
-            <td>${formatDate(card.submitted_at)}</td>
+            <td>${fmtDate(card.submitted_at)}</td>
           </tr>`).join('');
       }
     }
 
-  } catch(e) {
-    console.log('Supabase error:', e);
-  }
+  } catch(e) { console.log('Supabase error:',e); }
 }
 
-function setAllZero() {
-  document.querySelectorAll('.sv').forEach(el => {
-    if (!el.textContent.includes('%') && el.textContent !== '3') el.textContent = '0';
-  });
+function timeAgo(d) {
+  const s = Math.floor((new Date()-new Date(d))/1000);
+  if (s<60) return 'just now';
+  if (s<3600) return Math.floor(s/60)+' min ago';
+  if (s<86400) return Math.floor(s/3600)+' hr ago';
+  return Math.floor(s/86400)+' days ago';
 }
 
-function timeAgo(dateStr) {
-  const seconds = Math.floor((new Date() - new Date(dateStr)) / 1000);
-  if (seconds < 60) return 'just now';
-  if (seconds < 3600) return Math.floor(seconds/60) + ' min ago';
-  if (seconds < 86400) return Math.floor(seconds/3600) + ' hr ago';
-  return Math.floor(seconds/86400) + ' days ago';
+function fmtDate(d) {
+  if (!d) return '';
+  return new Date(d).toLocaleDateString('en-CA', {month:'short',day:'numeric'});
 }
 
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('en-CA', {month:'short', day:'numeric'});
-}
-
-function cap(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-// Load on start, then refresh every 30 seconds
 loadLiveData();
 setInterval(loadLiveData, 30000);
 
