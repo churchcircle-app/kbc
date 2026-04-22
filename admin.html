@@ -279,14 +279,14 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
 .lp-slate{background:linear-gradient(160deg,#0d1117,#1c2333,#0d1117);}
 .lph{padding:52px 18px 20px;text-align:center;}
 .lplo{width:68px;height:68px;border-radius:20px;margin:0 auto 13px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:24px;font-weight:900;box-shadow:0 12px 36px rgba(0,0,0,0.35);}
-.lpn{font-family:'Fraunces',serif;font-size:18px;font-weight:700;line-height:1.3;}
+.lpn{font-family:'Fraunces',serif;font-size:15px;font-weight:700;line-height:1.25;}
 .lpt{font-size:11px;margin-top:3px;font-style:italic;opacity:0.5;}
 .lpls{padding:6px 14px 20px;display:flex;flex-direction:column;gap:8px;width:100%;}
-.lpb{display:flex;align-items:center;gap:11px;padding:13px 14px;border-radius:15px;border:1px solid rgba(255,255,255,0.11);background:rgba(255,255,255,0.07);color:#fff;text-align:left;transition:all 0.18s;cursor:pointer;width:100%;}
+.lpb{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.11);background:rgba(255,255,255,0.07);color:#fff;text-align:left;transition:all 0.18s;cursor:pointer;width:100%;min-width:0;}
 .lpb-br{background:rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.1);color:#1a1520;}
-.lpi{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.lpi{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
 .lptx{flex:1;min-width:0;}
-.lpl{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lpl{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lps{font-size:10px;opacity:0.5;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lpar{opacity:0.3;font-size:14px;flex-shrink:0;}
 .lpf{text-align:center;font-size:9px;opacity:0.2;padding-bottom:20px;letter-spacing:1px;text-transform:uppercase;margin-top:auto;padding-top:8px;}
@@ -808,6 +808,27 @@ async function loadLiveData() {
     });
 
     // Connect cards
+    // Fetch link clicks
+    const clicks = await sbFetch('/rest/v1/link_clicks?select=link_name&order=clicked_at.desc');
+    const clickCounts = {};
+    if (clicks && clicks.length) {
+      clicks.forEach(cl => {
+        clickCounts[cl.link_name] = (clickCounts[cl.link_name] || 0) + 1;
+      });
+    }
+    const totalClicks = Object.values(clickCounts).reduce((a,b) => a+b, 0);
+
+    // Update Most Tapped Links
+    const linkNames = ['Connect Card', 'Give Online', 'Watch Online', "I'm New Here", 'Prayer Request', 'Events'];
+    const linkPctEls = document.querySelectorAll('.lpct');
+    const linkTapEls = document.querySelectorAll('.ltaps');
+    linkNames.forEach((name, i) => {
+      const count = clickCounts[name] || 0;
+      const pct = totalClicks > 0 ? Math.round((count / totalClicks) * 100) : 0;
+      if (linkPctEls[i]) linkPctEls[i].textContent = pct > 0 ? pct + '%' : '—';
+      if (linkTapEls[i]) linkTapEls[i].textContent = count + ' taps';
+    });
+
     const cards = await sbFetch('/rest/v1/connect_cards?select=*&order=submitted_at.desc');
     const cardCount = cards ? cards.length : 0;
     const connectRate = total > 0 ? Math.round((cardCount / total) * 100) : 0;
