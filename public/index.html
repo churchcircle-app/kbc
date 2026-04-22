@@ -311,40 +311,47 @@ function submitConnect() {
     return;
   }
 
-  // Send to Netlify Forms (works automatically on Netlify hosting)
-  const formData = new FormData();
-  formData.append('form-name', 'connect-card');
-  formData.append('first-name', first);
-  formData.append('last-name', last);
-  formData.append('email', email);
-  formData.append('phone', document.getElementById('cc-phone').value);
-  formData.append('visit-count', document.getElementById('cc-visit').value);
-  formData.append('interest', document.getElementById('cc-interest').value);
-  formData.append('circle', circle);
-  formData.append('timestamp', new Date().toISOString());
-
-  fetch('/', { method: 'POST', body: formData })
-    .then(() => {
-      document.getElementById('cc-form-wrap').style.display = 'none';
-      document.getElementById('cc-success').classList.add('show');
+  // Save to Supabase
+  fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/connect_cards', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify({
+      first_name: first,
+      last_name: last,
+      email: email,
+      phone: document.getElementById('cc-phone').value,
+      visit_count: document.getElementById('cc-visit').value,
+      interest: document.getElementById('cc-interest').value,
+      circle: circle
     })
-    .catch(() => {
-      // Still show success even if fetch fails (offline / dev mode)
-      document.getElementById('cc-form-wrap').style.display = 'none';
-      document.getElementById('cc-success').classList.add('show');
-    });
+  }).then(() => {
+    document.getElementById('cc-form-wrap').style.display = 'none';
+    document.getElementById('cc-success').classList.add('show');
+  }).catch(() => {
+    document.getElementById('cc-form-wrap').style.display = 'none';
+    document.getElementById('cc-success').classList.add('show');
+  });
 }
 
 // ── TAP ANALYTICS ─────────────────────────────────────
-// Logs a tap event to Netlify Function on every page load
-fetch('/.netlify/functions/log-tap', {
+// Log tap to Supabase
+fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/taps', {
   method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
+  headers: {
+    'Content-Type': 'application/json',
+    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
+    'Prefer': 'return=minimal'
+  },
   body: JSON.stringify({
-    circle,
-    timestamp: new Date().toISOString(),
-    userAgent: navigator.userAgent,
-    referrer: document.referrer
+    circle: circle,
+    user_agent: navigator.userAgent,
+    referrer: document.referrer || ''
   })
 }).catch(() => {}); // silent fail — never break the page
 </script>
