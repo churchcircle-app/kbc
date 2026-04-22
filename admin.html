@@ -716,6 +716,207 @@ function saveIt(){const t=document.getElementById('toast');t.classList.add('show
 function closeM(){document.getElementById('mnew').classList.remove('show');}
 
 init();
+
+// ══════════════════════════════════════════
+// SUPABASE LIVE DATA
+// ══════════════════════════════════════════
+const SB_URL = 'https://jhiovbtqrrvhbnesuerx.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw';
+
+async function sbFetch(endpoint) {
+  const res = await fetch(SB_URL + endpoint, {
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY
+    }
+  });
+  return res.json();
+}
+
+async function loadLiveData() {
+  try {
+    // Fetch all taps
+    const taps = await sbFetch('/rest/v1/taps?select=circle,tapped_at&order=tapped_at.desc');
+
+    if (!taps || taps.length === 0) {
+      setAllZero();
+      return;
+    }
+
+    // Total taps
+    const total = taps.length;
+
+    // Taps per circle
+    const byCircle = {};
+    taps.forEach(t => {
+      byCircle[t.circle] = (byCircle[t.circle] || 0) + 1;
+    });
+
+    // This week taps
+    const weekAgo = new Date(Date.now() - 7*24*60*60*1000);
+    const weekTaps = taps.filter(t => new Date(t.tapped_at) > weekAgo);
+    const weekTotal = weekTaps.length;
+
+    // Last tap times per circle
+    const lastTap = {};
+    taps.forEach(t => {
+      if (!lastTap[t.circle]) lastTap[t.circle] = t.tapped_at;
+    });
+
+    // Week taps by day (for chart)
+    const dayTotals = [0,0,0,0,0,0,0];
+    weekTaps.forEach(t => {
+      const d = new Date(t.tapped_at);
+      const dayIdx = (d.getDay() + 6) % 7; // Mon=0
+      dayTotals[dayIdx]++;
+    });
+
+    // Taps per circle this week
+    const weekByCircle = {};
+    weekTaps.forEach(t => {
+      weekByCircle[t.circle] = (weekByCircle[t.circle] || 0) + 1;
+    });
+
+    // Connect cards
+    const cards = await sbFetch('/rest/v1/connect_cards?select=*&order=submitted_at.desc');
+    const cardCount = cards ? cards.length : 0;
+    const connectRate = total > 0 ? Math.round((cardCount / total) * 100) : 0;
+
+    // ── UPDATE DASHBOARD STATS ──
+    document.querySelectorAll('.sv').forEach((el, i) => {
+      if (i === 0) el.textContent = total.toLocaleString();
+      if (i === 1) el.textContent = weekTotal.toLocaleString();
+      if (i === 2) el.textContent = '3';
+      if (i === 3) el.textContent = connectRate + '%';
+      // Analytics view stats (duplicate set)
+      if (i === 4) el.textContent = total.toLocaleString();
+      if (i === 5) el.textContent = weekTotal.toLocaleString();
+      if (i === 6) el.textContent = '3';
+      if (i === 7) el.textContent = connectRate + '%';
+    });
+
+    // ── UPDATE CIRCLE CARDS ──
+    const circles = ['auditorium','lobby','kids','outdoor'];
+    const circleEls = document.querySelectorAll('.csv');
+    circles.forEach((c, i) => {
+      if (circleEls[i*2]) circleEls[i*2].textContent = (byCircle[c] || 0).toLocaleString();
+      if (circleEls[i*2+1]) {
+        const wk = weekByCircle[c] || 0;
+        circleEls[i*2+1].textContent = wk > 0 ? wk + ' this wk' : '—';
+        circleEls[i*2+1].style.color = wk > 0 ? '#4ade80' : 'rgba(255,255,255,0.3)';
+        circleEls[i*2+1].style.fontSize = '13px';
+      }
+    });
+
+    // ── UPDATE LAST TAP TIMES ──
+    document.querySelectorAll('.clast').forEach((el, i) => {
+      const c = circles[i];
+      if (lastTap[c]) {
+        el.textContent = 'Last tap: ' + timeAgo(lastTap[c]);
+      } else {
+        el.textContent = 'No taps yet';
+      }
+    });
+
+    // ── UPDATE MINI CHARTS ──
+    const circleWeekData = {};
+    circles.forEach(c => {
+      circleWeekData[c] = [0,0,0,0,0,0,0];
+    });
+    weekTaps.forEach(t => {
+      if (circles.includes(t.circle)) {
+        const d = new Date(t.tapped_at);
+        const dayIdx = (d.getDay() + 6) % 7;
+        circleWeekData[t.circle][dayIdx]++;
+      }
+    });
+    circles.forEach((c, i) => {
+      const el = document.getElementById('mc'+(i+1));
+      if (!el) return;
+      const data = circleWeekData[c];
+      const mx = Math.max(...data, 1);
+      el.innerHTML = data.map((v,j) =>
+        `<div class="mb${v===Math.max(...data)&&v>0?' pk':''}" style="height:${Math.max(2,(v/mx)*28)}px"></div>`
+      ).join('');
+    });
+
+    // ── UPDATE ANALYTICS CHART ──
+    const mc = document.getElementById('mchart');
+    if (mc) {
+      const mx = Math.max(...dayTotals, 1);
+      mc.innerHTML = dayTotals.map((v,i) =>
+        `<div class="bgrp"><div class="bcol" style="height:${Math.max(2,(v/mx)*100)}px" title="${v} taps"></div><span class="bday">${DAYS[i]}</span></div>`
+      ).join('');
+    }
+
+    // ── UPDATE ANALYTICS WEEKLY BREAKDOWN ──
+    const breakdownEls = document.querySelectorAll('.awrap [style*="font-size:17px"]');
+    if (breakdownEls.length >= 4) {
+      breakdownEls[0].textContent = (weekByCircle['auditorium']||0);
+      breakdownEls[1].textContent = (weekByCircle['lobby']||0);
+      breakdownEls[2].textContent = (weekByCircle['kids']||0);
+      breakdownEls[3].textContent = (weekByCircle['outdoor']||0);
+    }
+
+    // ── UPDATE TOP CIRCLES ──
+    const sortedCircles = [...circles].sort((a,b) => (byCircle[b]||0) - (byCircle[a]||0));
+    const topTaps = document.querySelectorAll('.ttaps');
+    const topFills = document.querySelectorAll('.tfill');
+    const maxTaps = Math.max(...circles.map(c => byCircle[c]||0), 1);
+    sortedCircles.forEach((c, i) => {
+      if (topTaps[i]) topTaps[i].textContent = (byCircle[c]||0).toLocaleString();
+      if (topFills[i]) topFills[i].style.width = Math.round(((byCircle[c]||0)/maxTaps)*100) + '%';
+    });
+
+    // ── UPDATE CONNECT CARDS TABLE ──
+    if (cards && cards.length > 0) {
+      const tbody = document.querySelector('.subs-table tbody');
+      if (tbody) {
+        tbody.innerHTML = cards.slice(0,20).map(card => `
+          <tr>
+            <td>${card.first_name||''} ${card.last_name||''}</td>
+            <td>${card.email||''}</td>
+            <td><span class="sub-badge">${cap(card.circle||'')}</span></td>
+            <td>${card.visit_count||''}</td>
+            <td>${card.interest||''}</td>
+            <td>${formatDate(card.submitted_at)}</td>
+          </tr>`).join('');
+      }
+    }
+
+  } catch(e) {
+    console.log('Supabase error:', e);
+  }
+}
+
+function setAllZero() {
+  document.querySelectorAll('.sv').forEach(el => {
+    if (!el.textContent.includes('%') && el.textContent !== '3') el.textContent = '0';
+  });
+}
+
+function timeAgo(dateStr) {
+  const seconds = Math.floor((new Date() - new Date(dateStr)) / 1000);
+  if (seconds < 60) return 'just now';
+  if (seconds < 3600) return Math.floor(seconds/60) + ' min ago';
+  if (seconds < 86400) return Math.floor(seconds/3600) + ' hr ago';
+  return Math.floor(seconds/86400) + ' days ago';
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-CA', {month:'short', day:'numeric'});
+}
+
+function cap(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Load on start, then refresh every 30 seconds
+loadLiveData();
+setInterval(loadLiveData, 30000);
+
 </script>
 </body>
 </html>
