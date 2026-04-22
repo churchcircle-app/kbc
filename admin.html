@@ -703,6 +703,7 @@ function showPrev(key){
 }
 
 function showEd(key){
+  currentCircle = key;
   const cfg=CIRCLES[key];
   document.getElementById('edtitle').textContent='Edit — '+cfg.title;
   document.getElementById('en').value=cfg.name;
@@ -764,7 +765,65 @@ function cycleIcon(el){
   el.closest('.li').querySelector('.liico') && (el.closest('.li').querySelector('.liico').textContent = el.textContent);
   lp();
 }
-function saveIt(){const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+async function saveIt() {
+  // Build config from current editor state
+  const links = [];
+  document.querySelectorAll('#ell .li').forEach(item => {
+    const icon = item.querySelector('.liico') ? item.querySelector('.liico').textContent : '🌟';
+    const lbl  = item.querySelector('.linm') ? item.querySelector('.linm').textContent : '';
+    const sub  = item.querySelector('.liub') ? item.querySelector('.liub').textContent : '';
+    // sub is URL if it starts with http, otherwise it's a subtitle
+    const inputs = item.querySelectorAll('input');
+    const labelVal = inputs[0] ? inputs[0].value : lbl;
+    const subVal   = inputs[1] ? inputs[1].value : '';
+    const urlVal   = inputs[2] ? inputs[2].value : sub;
+    if (labelVal || lbl) links.push({
+      icon,
+      lbl: labelVal || lbl,
+      sub: subVal || '',
+      url: urlVal || sub || '#'
+    });
+  });
+
+  const cfg = {
+    id: currentCircle,
+    name:    document.getElementById('en').value,
+    tagline: document.getElementById('et').value,
+    logo:    document.getElementById('el').value,
+    bg:      eBg,
+    font:    eFont,
+    c1: eC.c1, c2: eC.c2, c3: eC.c3, c4: eC.c4,
+    links:   links,
+    updated_at: new Date().toISOString()
+  };
+
+  try {
+    const res = await fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/circles', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify(cfg)
+    });
+
+    if (res.ok || res.status === 201 || res.status === 200) {
+      const t = document.getElementById('toast');
+      t.textContent = '✓ Saved — live page updated instantly!';
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    } else {
+      const err = await res.text();
+      console.error('Save error:', err);
+      alert('Save failed — check console for details');
+    }
+  } catch(e) {
+    console.error('Save error:', e);
+    alert('Save failed: ' + e.message);
+  }
+}
 function closeM(){document.getElementById('mnew').classList.remove('show');}
 
 init();
