@@ -276,13 +276,14 @@ function submitConnect() {
 
 function trackLink(linkName, url, event) {
   if (event) event.preventDefault();
+  // Open URL immediately and synchronously — avoids popup blockers
+  if (url && url !== '#') window.open(url, '_blank');
+  // Track in background
   fetch(SB_URL + '/rest/v1/link_clicks', {
     method: 'POST',
     headers: sbHeaders(),
     body: JSON.stringify({ circle: circle, link_name: linkName, clicked_at: new Date().toISOString() })
-  }).catch(function(){}).finally(function() {
-    if (url && url !== '#') window.open(url, '_blank');
-  });
+  }).catch(function(){});
 }
 
 // Log tap

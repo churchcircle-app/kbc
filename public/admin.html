@@ -327,6 +327,7 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
           <div><div class="pg-title">KBC Circles</div><div class="pg-sub">Kennebecasis Baptist Church · 3 active</div></div>
           <div style="display:flex;gap:9px">
             <a class="btn-g" href="/index.html" target="_blank">🔗 View Live Site</a>
+            <button class="btn-g" onclick="confirmReset()" style="color:#f87171;border-color:rgba(248,113,113,0.3)">↺ Reset All Data</button>
             <button class="btn-p" onclick="document.getElementById('mnew').classList.add('show')">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               New Circle
@@ -586,32 +587,7 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
               <div class="llist" id="ell"></div>
               <button class="btn-g" style="width:100%;justify-content:center" onclick="addL()">+ Add Link</button>
             </div>
-            <div class="es">
-              <div class="est">Social Media</div>
-              <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px">
-                <div style="display:flex;align-items:center;gap:10px">
-                  <span style="font-size:16px;width:22px;text-align:center">📘</span>
-                  <input class="inp" style="margin:0" placeholder="Facebook URL" id="s-fb">
-                </div>
-                <div style="display:flex;align-items:center;gap:10px">
-                  <span style="font-size:16px;width:22px;text-align:center">📸</span>
-                  <input class="inp" style="margin:0" placeholder="Instagram URL" id="s-ig">
-                </div>
-                <div style="display:flex;align-items:center;gap:10px">
-                  <span style="font-size:16px;width:22px;text-align:center">▶️</span>
-                  <input class="inp" style="margin:0" placeholder="YouTube URL" id="s-yt">
-                </div>
-                <div style="display:flex;align-items:center;gap:10px">
-                  <span style="font-size:16px;width:22px;text-align:center">🎵</span>
-                  <input class="inp" style="margin:0" placeholder="TikTok URL" id="s-tt">
-                </div>
-                <div style="display:flex;align-items:center;gap:10px">
-                  <span style="font-size:16px;width:22px;text-align:center">🎧</span>
-                  <input class="inp" style="margin:0" placeholder="Podcast URL" id="s-pod">
-                </div>
-              </div>
-              <div style="font-size:11px;color:rgba(255,255,255,0.28);line-height:1.5">Leave blank to hide. Shows as icon row at bottom of landing page.</div>
-            </div>
+
             <div class="es">
               <div class="est">Settings</div>
               <div class="tglr"><span class="tgll">Circle Active</span><button class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></div>
@@ -717,29 +693,59 @@ function showPrev(key){
   V('preview');
 }
 
-function showEd(key){
+async function showEd(key){
   currentCircle = key;
-  const cfg=CIRCLES[key];
-  document.getElementById('edtitle').textContent='Edit — '+cfg.title;
-  document.getElementById('en').value=cfg.name;
-  document.getElementById('et').value=cfg.tag;
-  document.getElementById('el').value=cfg.logo;
-  eBg=cfg.bg;eFont=cfg.font;
-  eC={c1:cfg.c1,c2:cfg.c2,c3:cfg.c3,c4:cfg.c4};
-  [1,2,3,4].forEach(i=>{
-    document.getElementById('sw'+i).style.background=eC['c'+i];
-    document.getElementById('hx'+i).textContent=eC['c'+i];
-    document.getElementById('cp'+i).value=eC['c'+i];
+  V('editor');
+  document.getElementById('edtitle').textContent='Edit — ' + (CIRCLES[key] ? CIRCLES[key].title : key);
+
+  // Try loading from Supabase first, fall back to hardcoded
+  var cfg = CIRCLES[key];
+  try {
+    var res = await fetch(SB_URL + '/rest/v1/circles?id=eq.' + key + '&select=*', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    var data = await res.json();
+    if (data && data.length > 0) {
+      var sb = data[0];
+      cfg = {
+        title: CIRCLES[key] ? CIRCLES[key].title : key,
+        name: sb.name, tag: sb.tagline, logo: sb.logo,
+        logo_url: sb.logo_url || '',
+        bg: sb.bg, font: sb.font,
+        c1: sb.c1, c2: sb.c2, c3: sb.c3, c4: sb.c4,
+        links: typeof sb.links === 'string' ? JSON.parse(sb.links) : (sb.links || [])
+      };
+    }
+  } catch(e) { console.log('Using local config:', e); }
+
+  document.getElementById('en').value = cfg.name || '';
+  document.getElementById('et').value = cfg.tag || cfg.tagline || '';
+  document.getElementById('el').value = cfg.logo || '';
+  eBg = cfg.bg || 'dark';
+  eFont = cfg.font || 'fraunces';
+  eC = {c1: cfg.c1||'#39b5bc', c2: cfg.c2||'#2d8c92', c3: cfg.c3||'#f7c94b', c4: cfg.c4||'#39b5bc'};
+  [1,2,3,4].forEach(function(i){
+    document.getElementById('sw'+i).style.background = eC['c'+i];
+    document.getElementById('hx'+i).textContent = eC['c'+i];
+    document.getElementById('cp'+i).value = eC['c'+i];
   });
-  document.querySelectorAll('.bgopt').forEach(b=>b.classList.toggle('sel',b.dataset.bg===eBg));
-  document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('sel',b.dataset.f===eFont));
-  window.currentLogoUrl=cfg.logo_url||'';updateLogoPreview();loadLinks(key);lp();V('editor');
+  document.querySelectorAll('.bgopt').forEach(function(b){ b.classList.toggle('sel', b.dataset.bg===eBg); });
+  document.querySelectorAll('.fbtn').forEach(function(b){ b.classList.toggle('sel', b.dataset.f===eFont); });
+  window.currentLogoUrl = cfg.logo_url || '';
+  updateLogoPreview();
+
+  // Load links
+  var el = document.getElementById('ell');
+  el.innerHTML = '';
+  var links = cfg.links || [];
+  if (typeof links === 'string') { try { links = JSON.parse(links); } catch(e) { links = []; } }
+  links.forEach(function(l) { el.appendChild(makeLink(l)); });
+  lp();
 }
 
-function loadLinks(key){
-  const el=document.getElementById('ell');
-  el.innerHTML='';
-  CIRCLES[key].links.forEach(function(l){
+function makeLink(l) {
+    const d=document.createElement('div');
+    d.className='li';
     const d=document.createElement('div');
     d.className='li';
     const ico=document.createElement('span');
@@ -791,9 +797,15 @@ function loadLinks(key){
     d.appendChild(top);
     d.appendChild(fields);
     el.appendChild(d);
-  });
+  
+    return d;
 }
 
+function loadLinks(key){
+  const el=document.getElementById('ell');
+  el.innerHTML='';
+  CIRCLES[key].links.forEach(function(l){ el.appendChild(makeLink(l)); });
+}
 function lp(){
   const links=[];
   document.querySelectorAll('#ell .li').forEach(item=>{
@@ -908,6 +920,32 @@ async function saveIt() {
   }
 }
 function closeM(){document.getElementById('mnew').classList.remove('show');}
+
+function confirmReset() {
+  if (confirm('Reset ALL tap counts, link clicks, and connect card submissions? This cannot be undone.')) {
+    resetAllData();
+  }
+}
+
+async function resetAllData() {
+  try {
+    await fetch(SB_URL + '/rest/v1/taps?id=neq.00000000-0000-0000-0000-000000000000', {
+      method: 'DELETE', headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    await fetch(SB_URL + '/rest/v1/link_clicks?id=neq.00000000-0000-0000-0000-000000000000', {
+      method: 'DELETE', headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    await fetch(SB_URL + '/rest/v1/connect_cards?id=neq.00000000-0000-0000-0000-000000000000', {
+      method: 'DELETE', headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    const t = document.getElementById('toast');
+    t.textContent = '✓ All data reset to zero';
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); loadLiveData(); }, 2500);
+  } catch(e) {
+    alert('Reset failed: ' + e.message);
+  }
+}
 
 init();
 
