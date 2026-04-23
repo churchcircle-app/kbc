@@ -141,8 +141,14 @@ function loadCircle() {
 
 function renderCircle(cfg) {
   var logo = document.getElementById('logo');
-  logo.textContent = cfg.logo || 'KBC';
   logo.style.background = 'linear-gradient(135deg,' + (cfg.c1 || '#39b5bc') + ',' + (cfg.c2 || '#2d8c92') + ')';
+  if (cfg.logo_url) {
+    logo.innerHTML = '<img src="' + cfg.logo_url + '" style="width:100%;height:100%;object-fit:contain;border-radius:14px;display:block;" alt="logo">';
+    logo.style.padding = '0';
+  } else {
+    logo.textContent = cfg.logo || 'KBC';
+    logo.style.padding = '';
+  }
   document.getElementById('church-name').textContent = cfg.name || '';
   document.getElementById('church-tagline').textContent = cfg.tagline || '';
 

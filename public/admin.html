@@ -222,6 +222,9 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
 .liub{font-size:10px;color:rgba(255,255,255,0.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lidel{background:none;border:none;color:rgba(255,255,255,0.2);cursor:pointer;padding:4px;border-radius:5px;font-size:14px;transition:all 0.2s;line-height:1;flex-shrink:0;}
 .lidel:hover{color:#f87171;background:rgba(248,113,113,0.1);}
+.li-inp{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:7px 10px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;outline:none;transition:border-color 0.2s;}
+.li-inp:focus{border-color:rgba(57,181,188,0.5);background:rgba(57,181,188,0.04);}
+.li-inp::placeholder{color:rgba(255,255,255,0.25);}
 .tglr{display:flex;align-items:center;justify-content:space-between;padding:8px 0;}
 .tgll{font-size:12px;color:rgba(255,255,255,0.65);}
 .tgl{width:38px;height:20px;border-radius:10px;border:none;cursor:pointer;position:relative;transition:background 0.25s;flex-shrink:0;}
@@ -537,8 +540,19 @@ input[type="color"]{position:absolute;opacity:0;width:0;height:0;pointer-events:
               <input class="inp" id="en" value="Kennebecasis Baptist Church" oninput="lp()">
               <label class="ilbl">Tagline</label>
               <input class="inp" id="et" value="Loved. Known. Sent." oninput="lp()">
-              <label class="ilbl">Logo Initials / Emoji</label>
-              <input class="inp" id="el" value="KBC" maxlength="4" oninput="lp()">
+              <label class="ilbl">Logo</label>
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:9px">
+                <div id="logo-preview" style="width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,#39b5bc,#2d8c92);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:#fff;flex-shrink:0;overflow:hidden;">KBC</div>
+                <div style="flex:1">
+                  <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:6px">Upload image or use initials</div>
+                  <label style="display:inline-flex;align-items:center;gap:6px;padding:7px 12px;background:rgba(57,181,188,0.1);border:1px solid rgba(57,181,188,0.25);border-radius:9px;font-size:12px;font-weight:600;color:#39b5bc;cursor:pointer;">
+                    Upload Logo
+                    <input type="file" id="logo-upload" accept="image/*" style="display:none" onchange="handleLogoUpload(this)">
+                  </label>
+                  <button onclick="clearLogo()" style="margin-left:6px;padding:7px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:9px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">Use Initials</button>
+                </div>
+              </div>
+              <input class="inp" id="el" value="KBC" maxlength="4" oninput="updateLogoText()" placeholder="Initials e.g. KBC">
             </div>
             <div class="es">
               <div class="est">Brand Colors</div>
@@ -692,7 +706,7 @@ function buildLP(cfg){
   const bc=dark?'lp lp-'+cfg.bg:'lp lp-'+cfg.bg;
   const btnc=dark?'lpb':'lpb lpb-br';
   const ff=cfg.font==='fraunces'?"'Fraunces',serif":"'Plus Jakarta Sans',sans-serif";
-  return`<div class="${bc}"><div class="lph"><div class="lplo" style="background:linear-gradient(135deg,${cfg.c1},${cfg.c2})">${cfg.logo}</div><div class="lpn" style="color:${tc};font-family:${ff}">${cfg.name}</div><div class="lpt" style="color:${tc}">${cfg.tag}</div></div><div class="lpls">${cfg.links.map(l=>`<div class="${btnc}"><div class="lpi" style="background:${cfg.c1}22">${l.icon}</div><div class="lptx"><div class="lpl" style="color:${tc};font-family:${ff}">${l.lbl}</div><div class="lps" style="color:${tc}">${l.sub}</div></div><div class="lpar" style="color:${tc}">›</div></div>`).join('')}</div><div class="lpf" style="color:${tc}">Powered by ChurchCircle</div></div>`;
+  return`<div class="${bc}"><div class="lph"><div class="lplo" style="background:linear-gradient(135deg,${cfg.c1},${cfg.c2});padding:${cfg.logo_url ? '0' : ''}">${cfg.logo_url ? '<img src="'+cfg.logo_url+'" style="width:100%;height:100%;object-fit:contain;border-radius:14px;display:block;" alt="logo">' : cfg.logo}</div><div class="lpn" style="color:${tc};font-family:${ff}">${cfg.name}</div><div class="lpt" style="color:${tc}">${cfg.tag}</div></div><div class="lpls">${cfg.links.map(l=>`<div class="${btnc}"><div class="lpi" style="background:${cfg.c1}22">${l.icon}</div><div class="lptx"><div class="lpl" style="color:${tc};font-family:${ff}">${l.lbl}</div><div class="lps" style="color:${tc}">${l.sub}</div></div><div class="lpar" style="color:${tc}">›</div></div>`).join('')}</div><div class="lpf" style="color:${tc}">Powered by ChurchCircle</div></div>`;
 }
 
 function showPrev(key){
@@ -719,20 +733,78 @@ function showEd(key){
   });
   document.querySelectorAll('.bgopt').forEach(b=>b.classList.toggle('sel',b.dataset.bg===eBg));
   document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('sel',b.dataset.f===eFont));
-  loadLinks(key);lp();V('editor');
+  window.currentLogoUrl=cfg.logo_url||'';updateLogoPreview();loadLinks(key);lp();V('editor');
 }
 
 function loadLinks(key){
   const el=document.getElementById('ell');
-  el.innerHTML=CIRCLES[key].links.map(l=>`<div class="li"><span class="liico">${l.icon}</span><div class="liinf"><div class="linm">${l.lbl}</div><div class="liub">${l.url}</div></div><button class="lidel" onclick="this.closest('.li').remove();lp()">✕</button></div>`).join('');
+  el.innerHTML='';
+  CIRCLES[key].links.forEach(function(l){
+    const d=document.createElement('div');
+    d.className='li';
+    const ico=document.createElement('span');
+    ico.className='liico';
+    ico.style.cssText='font-size:20px;cursor:pointer;flex-shrink:0';
+    ico.title='Click to cycle icon';
+    ico.textContent=l.icon||'🌟';
+    ico.onclick=function(){cycleIcon(this);};
+
+    const lbl_txt=document.createElement('span');
+    lbl_txt.style.cssText='font-size:11px;color:rgba(255,255,255,0.35);flex:1';
+    lbl_txt.textContent=l.lbl||'';
+
+    const del=document.createElement('button');
+    del.className='lidel';
+    del.textContent='✕';
+    del.onclick=function(){this.closest('.li').remove();lp();};
+
+    const top=document.createElement('div');
+    top.style.cssText='display:flex;align-items:center;gap:9px;margin-bottom:8px';
+    top.appendChild(ico);
+    top.appendChild(lbl_txt);
+    top.appendChild(del);
+
+    const inp1=document.createElement('input');
+    inp1.className='li-inp';
+    inp1.placeholder='Label e.g. Give Online';
+    inp1.value=l.lbl||'';
+    inp1.oninput=function(){lbl_txt.textContent=this.value;lp();};
+
+    const inp2=document.createElement('input');
+    inp2.className='li-inp';
+    inp2.placeholder='Subtitle e.g. Generous and secure';
+    inp2.value=l.sub||'';
+    inp2.oninput=function(){lp();};
+
+    const inp3=document.createElement('input');
+    inp3.className='li-inp';
+    inp3.placeholder='URL e.g. https://kbconline.ca/give';
+    inp3.value=l.url||'';
+    inp3.oninput=function(){lp();};
+
+    const fields=document.createElement('div');
+    fields.style.cssText='display:flex;flex-direction:column;gap:5px';
+    fields.appendChild(inp1);
+    fields.appendChild(inp2);
+    fields.appendChild(inp3);
+
+    d.appendChild(top);
+    d.appendChild(fields);
+    el.appendChild(d);
+  });
 }
 
 function lp(){
   const links=[];
   document.querySelectorAll('#ell .li').forEach(item=>{
-    links.push({icon:item.querySelector('.liico').textContent,lbl:item.querySelector('.linm').textContent,sub:item.querySelector('.liub').textContent,url:'#'});
+    const inputs = item.querySelectorAll('.li-inp');
+    const icon = item.querySelector('.liico') ? item.querySelector('.liico').textContent.trim() : '🌟';
+    const lbl  = inputs[0] ? inputs[0].value : (item.querySelector('.linm') ? item.querySelector('.linm').textContent : '');
+    const sub  = inputs[1] ? inputs[1].value : '';
+    const url  = inputs[2] ? inputs[2].value : (item.querySelector('.liub') ? item.querySelector('.liub').textContent : '#');
+    if (lbl) links.push({icon:icon, lbl:lbl, sub:sub, url:url});
   });
-  const cfg={name:document.getElementById('en')?.value||'Church Name',tag:document.getElementById('et')?.value||'',logo:document.getElementById('el')?.value||'KBC',bg:eBg,font:eFont,...eC,links};
+  const cfg={name:document.getElementById('en')?.value||'Church Name',tag:document.getElementById('et')?.value||'',logo:document.getElementById('el')?.value||'KBC',logo_url:window.currentLogoUrl||'',bg:eBg,font:eFont,...eC,links};
   document.getElementById('ep').innerHTML=buildLP(cfg);
 }
 
@@ -742,17 +814,34 @@ function sf(el,f){eFont=f;document.querySelectorAll('.fbtn').forEach(b=>b.classL
 function addL(){
   const d=document.createElement('div');
   d.className='li';
-  d.innerHTML=`
-    <div style="display:flex;align-items:center;gap:9px;width:100%">
-      <span class="liico" style="font-size:18px;cursor:pointer" onclick="cycleIcon(this)" title="Click to change icon">🌟</span>
-      <div class="liinf" style="flex:1;display:flex;flex-direction:column;gap:5px">
-        <input style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;color:#fff;font-size:12px;outline:none;font-family:'Plus Jakarta Sans',sans-serif;width:100%" placeholder="Label e.g. Give Online" oninput="this.closest('.li').querySelector('.linm').textContent=this.value;lp()">
-        <input style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;color:#fff;font-size:12px;outline:none;font-family:'Plus Jakarta Sans',sans-serif;width:100%" placeholder="URL e.g. https://kbconline.ca/give" oninput="this.closest('.li').querySelector('.liub').textContent=this.value;lp()">
-      </div>
-      <button class="lidel" onclick="this.closest('.li').remove();lp()">✕</button>
-    </div>
-    <div class="linm" style="display:none">New Link</div>
-    <div class="liub" style="display:none">https://</div>`;
+  const ico=document.createElement('span');
+  ico.className='liico';
+  ico.style.cssText='font-size:20px;cursor:pointer;flex-shrink:0';
+  ico.title='Click to cycle icon';
+  ico.textContent='🌟';
+  ico.onclick=function(){cycleIcon(this);};
+  const lbl_txt=document.createElement('span');
+  lbl_txt.style.cssText='font-size:11px;color:rgba(255,255,255,0.35);flex:1';
+  lbl_txt.textContent='New Link';
+  const del=document.createElement('button');
+  del.className='lidel'; del.textContent='✕';
+  del.onclick=function(){this.closest('.li').remove();lp();};
+  const top=document.createElement('div');
+  top.style.cssText='display:flex;align-items:center;gap:9px;margin-bottom:8px';
+  top.appendChild(ico); top.appendChild(lbl_txt); top.appendChild(del);
+  const inp1=document.createElement('input');
+  inp1.className='li-inp'; inp1.placeholder='Label e.g. Give Online';
+  inp1.oninput=function(){lbl_txt.textContent=this.value;lp();};
+  const inp2=document.createElement('input');
+  inp2.className='li-inp'; inp2.placeholder='Subtitle e.g. Generous and secure';
+  inp2.oninput=function(){lp();};
+  const inp3=document.createElement('input');
+  inp3.className='li-inp'; inp3.placeholder='URL e.g. https://kbconline.ca/give';
+  inp3.oninput=function(){lp();};
+  const fields=document.createElement('div');
+  fields.style.cssText='display:flex;flex-direction:column;gap:5px';
+  fields.appendChild(inp1); fields.appendChild(inp2); fields.appendChild(inp3);
+  d.appendChild(top); d.appendChild(fields);
   document.getElementById('ell').appendChild(d);
   d.querySelector('input').focus();
   lp();
@@ -770,20 +859,12 @@ async function saveIt() {
   // Build config from current editor state
   const links = [];
   document.querySelectorAll('#ell .li').forEach(item => {
-    const icon = item.querySelector('.liico') ? item.querySelector('.liico').textContent : '🌟';
-    const lbl  = item.querySelector('.linm') ? item.querySelector('.linm').textContent : '';
-    const sub  = item.querySelector('.liub') ? item.querySelector('.liub').textContent : '';
-    // sub is URL if it starts with http, otherwise it's a subtitle
-    const inputs = item.querySelectorAll('input');
-    const labelVal = inputs[0] ? inputs[0].value : lbl;
-    const subVal   = inputs[1] ? inputs[1].value : '';
-    const urlVal   = inputs[2] ? inputs[2].value : sub;
-    if (labelVal || lbl) links.push({
-      icon,
-      lbl: labelVal || lbl,
-      sub: subVal || '',
-      url: urlVal || sub || '#'
-    });
+    const inputs = item.querySelectorAll('.li-inp');
+    const icon = item.querySelector('.liico') ? item.querySelector('.liico').textContent.trim() : '🌟';
+    const lbl  = inputs[0] ? inputs[0].value : '';
+    const sub  = inputs[1] ? inputs[1].value : '';
+    const url  = inputs[2] ? inputs[2].value : '#';
+    if (lbl) links.push({ icon:icon, lbl:lbl, sub:sub, url:url });
   });
 
   const cfg = {
@@ -791,6 +872,7 @@ async function saveIt() {
     name:    document.getElementById('en').value,
     tagline: document.getElementById('et').value,
     logo:    document.getElementById('el').value,
+    logo_url: window.currentLogoUrl||'',
     bg:      eBg,
     font:    eFont,
     c1: eC.c1, c2: eC.c2, c3: eC.c3, c4: eC.c4,
@@ -828,6 +910,72 @@ async function saveIt() {
 function closeM(){document.getElementById('mnew').classList.remove('show');}
 
 init();
+
+// ── LOGO HANDLING ─────────────────────────────────────
+window.currentLogoUrl = '';
+
+function updateLogoPreview() {
+  var prev = document.getElementById('logo-preview');
+  if (!prev) return;
+  var logoInput = document.getElementById('el');
+  if (window.currentLogoUrl) {
+    prev.innerHTML = '<img src="' + window.currentLogoUrl + '" style="width:100%;height:100%;object-fit:contain;border-radius:14px;display:block;" alt="logo">';
+    prev.style.padding = '0';
+    if (logoInput) logoInput.style.opacity = '0.3';
+  } else {
+    prev.innerHTML = '';
+    prev.textContent = logoInput ? (logoInput.value || 'KBC') : 'KBC';
+    prev.style.padding = '';
+    if (logoInput) logoInput.style.opacity = '1';
+  }
+}
+
+function updateLogoText() {
+  if (!window.currentLogoUrl) updateLogoPreview();
+  lp();
+}
+
+function clearLogo() {
+  window.currentLogoUrl = '';
+  updateLogoPreview();
+  lp();
+}
+
+async function handleLogoUpload(input) {
+  var file = input.files[0];
+  if (!file) return;
+
+  // Show local preview immediately using base64
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    window.currentLogoUrl = e.target.result;
+    updateLogoPreview();
+    lp();
+  };
+  reader.readAsDataURL(file);
+
+  // Upload to Supabase Storage
+  try {
+    var fileName = 'logos/' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._]/g, '_');
+    var res = await fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/storage/v1/object/church-assets/' + fileName, {
+      method: 'POST',
+      headers: {
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
+        'Content-Type': file.type,
+        'x-upsert': 'true'
+      },
+      body: file
+    });
+    if (res.ok) {
+      window.currentLogoUrl = 'https://jhiovbtqrrvhbnesuerx.supabase.co/storage/v1/object/public/church-assets/' + fileName;
+      updateLogoPreview();
+      lp();
+    }
+  } catch(e) {
+    console.log('Using base64 logo:', e);
+  }
+}
 
 // ══════════════════════════════════════════
 // SUPABASE LIVE DATA
