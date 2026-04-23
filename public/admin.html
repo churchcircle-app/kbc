@@ -664,6 +664,7 @@ const MD={mc1:[42,55,38,71,90,120,88],mc2:[12,18,9,24,30,44,28],mc3:[8,10,6,14,1
 const MAIN=[54,74,54,114,146,192,134];
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 let eBg='dark',eFont='fraunces',eC={c1:'#39b5bc',c2:'#2d8c92',c3:'#f7c94b',c4:'#39b5bc'};
+let currentCircle='auditorium';
 
 function init(){
   Object.entries(MD).forEach(([id,data])=>{
@@ -804,7 +805,7 @@ async function saveIt() {
         'Content-Type': 'application/json',
         'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw',
-        'Prefer': 'resolution=merge-duplicates'
+        'Prefer': 'resolution=merge-duplicates,return=minimal'
       },
       body: JSON.stringify(cfg)
     });

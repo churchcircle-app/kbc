@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0a1929">
 <title>KBC — Kennebecasis Baptist Church</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,174 +10,64 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif;}
-body{
-  background:linear-gradient(160deg,#0a1929 0%,#0e2440 50%,#071520 100%);
-  color:#fff;min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;
-}
-
-/* ── ANIMATED BG ── */
-.bg-orb{
-  position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;
-  animation:drift 8s ease-in-out infinite alternate;
-}
+body{background:linear-gradient(160deg,#0a1929 0%,#0e2440 50%,#071520 100%);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;transition:background 0.4s;}
+.bg-orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:drift 8s ease-in-out infinite alternate;}
 .bg-orb-1{width:300px;height:300px;background:rgba(57,181,188,0.12);top:-80px;left:-60px;}
 .bg-orb-2{width:250px;height:250px;background:rgba(45,140,146,0.08);bottom:100px;right:-60px;animation-delay:-4s;}
-@keyframes drift{0%{transform:translate(0,0) scale(1);}100%{transform:translate(20px,20px) scale(1.05);}}
-
-/* ── WRAPPER ── */
-.wrapper{
-  width:100%;max-width:420px;min-height:100vh;
-  display:flex;flex-direction:column;position:relative;z-index:1;
-  padding:0 0 32px;
-}
-
-/* ── HERO ── */
-.hero{
-  padding:56px 24px 28px;text-align:center;
-  animation:fadeUp 0.5s ease both;
-}
-.logo-wrap{
-  width:76px;height:76px;border-radius:22px;margin:0 auto 16px;
-  background:linear-gradient(135deg,#39b5bc,#2d8c92);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:#fff;
-  box-shadow:0 16px 48px rgba(57,181,188,0.4),0 0 0 1px rgba(255,255,255,0.1);
-}
-.church-name{
-  font-family:'Fraunces',serif;font-size:22px;font-weight:700;
-  line-height:1.2;margin-bottom:5px;
-}
+@keyframes drift{0%{transform:translate(0,0);}100%{transform:translate(20px,20px);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+.wrapper{width:100%;max-width:420px;min-height:100vh;display:flex;flex-direction:column;position:relative;z-index:1;padding:0 0 32px;}
+.hero{padding:56px 24px 28px;text-align:center;animation:fadeUp 0.5s ease both;}
+.logo-wrap{width:76px;height:76px;border-radius:22px;margin:0 auto 16px;background:linear-gradient(135deg,#39b5bc,#2d8c92);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:#fff;box-shadow:0 16px 48px rgba(57,181,188,0.4);transition:background 0.4s;}
+.church-name{font-family:'Fraunces',serif;font-size:22px;font-weight:700;line-height:1.2;margin-bottom:5px;word-break:break-word;}
 .church-tagline{font-size:13px;opacity:0.5;font-style:italic;}
-
-/* ── GREETING ── */
-.greeting{
-  margin:0 20px 20px;padding:14px 18px;
-  background:rgba(57,181,188,0.08);border:1px solid rgba(57,181,188,0.2);
-  border-radius:16px;font-size:13px;color:rgba(255,255,255,0.8);line-height:1.5;
-  animation:fadeUp 0.5s 0.1s ease both;
-  display:none;
-}
+.greeting{margin:0 20px 20px;padding:14px 18px;background:rgba(57,181,188,0.08);border:1px solid rgba(57,181,188,0.2);border-radius:16px;font-size:13px;color:rgba(255,255,255,0.8);line-height:1.5;display:none;}
 .greeting.show{display:block;}
-
-/* ── LINKS ── */
-.links{
-  padding:0 20px;display:flex;flex-direction:column;gap:10px;
-}
-.link-btn{
-  display:flex;align-items:center;gap:14px;padding:15px 16px;
-  border-radius:18px;border:1px solid rgba(255,255,255,0.1);
-  background:rgba(255,255,255,0.07);backdrop-filter:blur(12px);
-  color:#fff;text-decoration:none;transition:all 0.2s;
-  animation:fadeUp 0.4s ease both;
-}
-.link-btn:hover,.link-btn:active{
-  background:rgba(255,255,255,0.13);
-  border-color:rgba(255,255,255,0.2);
-  transform:translateX(3px);
-}
-.link-icon{
-  width:42px;height:42px;border-radius:13px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:19px;flex-shrink:0;
-}
+.links{padding:0 20px;display:flex;flex-direction:column;gap:10px;}
+.link-btn{display:flex;align-items:center;gap:14px;padding:15px 16px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.07);backdrop-filter:blur(12px);color:#fff;text-align:left;transition:all 0.2s;animation:fadeUp 0.4s ease both;width:100%;cursor:pointer;}
+.link-btn:hover,.link-btn:active{background:rgba(255,255,255,0.13);transform:translateX(3px);}
+.link-icon{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
 .link-text{flex:1;text-align:left;}
-.link-label{font-family:'Fraunces',serif;font-size:15px;font-weight:700;line-height:1.2;white-space:nowrap;}
+.link-label{font-family:'Fraunces',serif;font-size:15px;font-weight:700;line-height:1.2;}
 .link-sub{font-size:11px;opacity:0.48;margin-top:2px;}
 .link-arrow{opacity:0.25;font-size:16px;flex-shrink:0;}
-
-/* ── CONNECT CARD (inline form) ── */
-.connect-card{
-  margin:0 20px;padding:22px 20px;
-  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
-  border-radius:20px;display:none;
-  animation:fadeUp 0.3s ease both;
-}
+.connect-card{margin:0 20px;padding:22px 20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:20px;display:none;}
 .connect-card.show{display:block;}
 .cc-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:4px;}
 .cc-sub{font-size:12px;opacity:0.45;margin-bottom:18px;}
-.cc-field{
-  width:100%;background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.12);border-radius:12px;
-  padding:11px 14px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:14px;outline:none;margin-bottom:10px;transition:border-color 0.2s;
-}
+.cc-field{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:11px 14px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;margin-bottom:10px;transition:border-color 0.2s;}
 .cc-field:focus{border-color:rgba(57,181,188,0.6);background:rgba(57,181,188,0.06);}
 .cc-field::placeholder{color:rgba(255,255,255,0.3);}
 .cc-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.cc-select{
-  width:100%;background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.12);border-radius:12px;
-  padding:11px 14px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:14px;outline:none;margin-bottom:10px;
-  -webkit-appearance:none;
-}
+.cc-select{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:11px 14px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;margin-bottom:10px;-webkit-appearance:none;}
 .cc-select option{background:#0e1928;color:#fff;}
-.cc-submit{
-  width:100%;padding:13px;
-  background:linear-gradient(135deg,#39b5bc,#2d8c92);
-  border:none;border-radius:13px;color:#fff;
-  font-family:'Fraunces',serif;font-size:16px;font-weight:700;
-  cursor:pointer;transition:all 0.2s;margin-top:4px;
-}
+.cc-submit{width:100%;padding:13px;background:linear-gradient(135deg,#39b5bc,#2d8c92);border:none;border-radius:13px;color:#fff;font-family:'Fraunces',serif;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:4px;}
 .cc-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(57,181,188,0.4);}
-.cc-cancel{
-  width:100%;padding:10px;background:none;border:none;
-  color:rgba(255,255,255,0.35);font-size:13px;cursor:pointer;margin-top:4px;
-}
-.cc-success{
-  text-align:center;padding:20px 0;display:none;
-}
+.cc-cancel{width:100%;padding:10px;background:none;border:none;color:rgba(255,255,255,0.35);font-size:13px;cursor:pointer;margin-top:4px;}
+.cc-success{text-align:center;padding:20px 0;display:none;}
 .cc-success.show{display:block;}
 .cc-success-icon{font-size:40px;margin-bottom:10px;}
 .cc-success-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
 .cc-success-sub{font-size:13px;opacity:0.5;}
-
-/* ── FOOTER ── */
-.footer{
-  text-align:center;font-size:10px;opacity:0.18;
-  padding-top:24px;letter-spacing:1px;text-transform:uppercase;
-}
-
-/* ── ANIMATIONS ── */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(14px);}
-  to{opacity:1;transform:translateY(0);}
-}
-.link-btn:nth-child(1){animation-delay:0.15s;}
-.link-btn:nth-child(2){animation-delay:0.2s;}
-.link-btn:nth-child(3){animation-delay:0.25s;}
-.link-btn:nth-child(4){animation-delay:0.3s;}
-.link-btn:nth-child(5){animation-delay:0.35s;}
-.link-btn:nth-child(6){animation-delay:0.4s;}
-
-/* Social icons */
-.social-icon {
-  width:42px;height:42px;border-radius:12px;
-  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;text-decoration:none;transition:all 0.2s;
-}
+.social-row{padding:4px 20px 16px;justify-content:center;gap:12px;flex-wrap:wrap;display:none;}
+.social-icon{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;text-decoration:none;transition:all 0.2s;}
 .social-icon:hover{background:rgba(255,255,255,0.14);transform:translateY(-2px);}
+.footer{text-align:center;font-size:10px;opacity:0.18;padding-top:24px;letter-spacing:1px;text-transform:uppercase;}
+.loader{display:flex;align-items:center;justify-content:center;padding:60px 20px;opacity:0.4;}
+.spinner{width:32px;height:32px;border:3px solid rgba(255,255,255,0.15);border-top-color:#39b5bc;border-radius:50%;animation:spin 0.8s linear infinite;}
 </style>
 </head>
 <body>
-
 <div class="bg-orb bg-orb-1"></div>
 <div class="bg-orb bg-orb-2"></div>
-
 <div class="wrapper">
-
   <div class="hero">
     <div class="logo-wrap" id="logo">KBC</div>
     <div class="church-name" id="church-name">Kennebecasis Baptist Church</div>
     <div class="church-tagline" id="church-tagline">Loved. Known. Sent.</div>
   </div>
-
-  <!-- Contextual greeting based on circle type -->
   <div class="greeting" id="greeting"></div>
-
-  <!-- Connect Card Form (inline, shown when tapped) -->
   <div class="connect-card" id="connect-card">
     <div id="cc-form-wrap">
       <div class="cc-title">Connect with us 👋</div>
@@ -192,7 +81,7 @@ body{
       <select class="cc-select" id="cc-visit">
         <option value="" disabled selected>How many times have you visited?</option>
         <option>First time!</option>
-        <option>2–3 times</option>
+        <option>2-3 times</option>
         <option>I'm a regular</option>
         <option>I'm already a member</option>
       </select>
@@ -205,7 +94,7 @@ body{
         <option>Speaking with a pastor</option>
         <option>Just browsing for now</option>
       </select>
-      <button class="cc-submit" onclick="submitConnect()">Send →</button>
+      <button class="cc-submit" onclick="submitConnect()">Send</button>
       <button class="cc-cancel" onclick="closeConnect()">Maybe later</button>
     </div>
     <div class="cc-success" id="cc-success">
@@ -214,175 +103,134 @@ body{
       <div class="cc-success-sub">Thanks for reaching out. Someone from KBC will be in touch soon.</div>
     </div>
   </div>
-
-  <!-- Main Links -->
   <div class="links" id="links-wrap">
-
-    <button class="link-btn" onclick="trackLink(&quot;I'm New Here&quot;,'#',event);openConnect(event)">
-      <div class="link-icon" style="background:rgba(57,181,188,0.18)">👋</div>
-      <div class="link-text">
-        <div class="link-label">I'm New Here</div>
-        <div class="link-sub">Say hello & connect with us</div>
-      </div>
-      <div class="link-arrow">›</div>
-    </button>
-
-    <button class="link-btn" onclick="trackLink('Connect Card','#',event);openConnect(event)">
-      <div class="link-icon" style="background:rgba(45,140,146,0.18)">📋</div>
-      <div class="link-text">
-        <div class="link-label">Connect Card</div>
-        <div class="link-sub">Fill out & stay in touch</div>
-      </div>
-      <div class="link-arrow">›</div>
-    </button>
-
-    <button class="link-btn" onclick="trackLink('Watch Online','https://www.kbconline.ca/live-stream',event)">
-      <div class="link-icon" style="background:rgba(91,143,249,0.18)">▶️</div>
-      <div class="link-text">
-        <div class="link-label">Watch Online</div>
-        <div class="link-sub">Live & past messages</div>
-      </div>
-      <div class="link-arrow">›</div>
-    </button>
-
-    <button class="link-btn" onclick="trackLink('Prayer Request','https://www.kbconline.ca',event)">
-      <div class="link-icon" style="background:rgba(155,114,203,0.18)">🙏</div>
-      <div class="link-text">
-        <div class="link-label">Prayer Request</div>
-        <div class="link-sub">We're praying with you</div>
-      </div>
-      <div class="link-arrow">›</div>
-    </button>
-
-    <button class="link-btn" onclick="trackLink('Give Online','https://www.kbconline.ca/give',event)">
-      <div class="link-icon" style="background:rgba(247,201,75,0.18)">💛</div>
-      <div class="link-text">
-        <div class="link-label">Give Online</div>
-        <div class="link-sub">Generous & secure</div>
-      </div>
-      <div class="link-arrow">›</div>
-    </button>
-
-    <button class="link-btn" onclick="trackLink('Events','https://kbc.churchcenter.com/registrations/events',event)">
-      <div class="link-icon" style="background:rgba(240,123,84,0.18)">📅</div>
-      <div class="link-text">
-        <div class="link-label">Events</div>
-        <div class="link-sub">What's coming up at KBC</div>
-      </div>
-      <div class="link-arrow">›</div>
-    </button>
-
+    <div class="loader"><div class="spinner"></div></div>
   </div>
-
-  <!-- Social Media Icons -->
-  <div id="social-row" style="display:none;padding:4px 20px 16px;justify-content:center;gap:12px;flex-wrap:wrap"></div>
-
+  <div class="social-row" id="social-row"></div>
   <div class="footer">Powered by ChurchCircle</div>
-
 </div>
-
+<form name="connect-card" netlify hidden>
+  <input name="first-name"><input name="last-name"><input name="email">
+  <input name="phone"><input name="visit-count"><input name="interest"><input name="circle">
+</form>
 <script>
-// ── CIRCLE DETECTION ──────────────────────────────────
-const params = new URLSearchParams(window.location.search);
-const circle = params.get('circle') || 'auditorium';
+var SB_URL = 'https://jhiovbtqrrvhbnesuerx.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw';
+var params = new URLSearchParams(window.location.search);
+var circle = params.get('circle') || 'auditorium';
 
-const SB_URL = 'https://jhiovbtqrrvhbnesuerx.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw';
+function sbHeaders() {
+  return { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' };
+}
 
-// ── LOAD CIRCLE CONFIG FROM SUPABASE ──────────────────
-async function loadCircle() {
-  try {
-    const res = await fetch(SB_URL + '/rest/v1/circles?id=eq.' + circle + '&select=*', {
-      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+function loadCircle() {
+  fetch(SB_URL + '/rest/v1/circles?id=eq.' + circle + '&select=*', { headers: sbHeaders() })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && data.length > 0) {
+        renderCircle(data[0]);
+      } else {
+        renderDefault();
+      }
+    })
+    .catch(function(e) {
+      console.log('Supabase error:', e);
+      renderDefault();
     });
-    const data = await res.json();
-    if (data && data.length > 0) {
-      renderCircle(data[0]);
-    } else {
-      // Circle not found in DB — show default fallback
-      renderFallback();
-    }
-  } catch(e) {
-    console.log('Load error:', e);
-    renderFallback();
-  }
 }
 
 function renderCircle(cfg) {
-  // Update logo
-  const logoEl = document.getElementById('logo');
-  if (logoEl) {
-    logoEl.textContent = cfg.logo || 'KBC';
-    logoEl.style.background = 'linear-gradient(135deg,' + cfg.c1 + ',' + cfg.c2 + ')';
-  }
+  var logo = document.getElementById('logo');
+  logo.textContent = cfg.logo || 'KBC';
+  logo.style.background = 'linear-gradient(135deg,' + (cfg.c1 || '#39b5bc') + ',' + (cfg.c2 || '#2d8c92') + ')';
+  document.getElementById('church-name').textContent = cfg.name || '';
+  document.getElementById('church-tagline').textContent = cfg.tagline || '';
 
-  // Update church name & tagline
-  const nameEl = document.getElementById('church-name');
-  const tagEl = document.getElementById('church-tagline');
-  if (nameEl) nameEl.textContent = cfg.name || '';
-  if (tagEl) tagEl.textContent = cfg.tagline || '';
-
-  // Update background
-  const bgMap = {
-    dark: 'linear-gradient(160deg,#0a1929 0%,#0e2440 50%,#071520 100%)',
-    warm: 'linear-gradient(160deg,#1a0f07 0%,#2a1810 50%,#1a0f07 100%)',
-    bright: 'linear-gradient(160deg,#f5f8ff 0%,#e8f0fb 100%)',
+  var bgs = {
+    dark:     'linear-gradient(160deg,#0a1929 0%,#0e2440 50%,#071520 100%)',
+    warm:     'linear-gradient(160deg,#1a0f07 0%,#2a1810 50%,#1a0f07 100%)',
+    bright:   'linear-gradient(160deg,#f5f8ff 0%,#e8f0fb 100%)',
     midnight: 'linear-gradient(160deg,#08081a 0%,#14082e 50%,#08081a 100%)',
-    forest: 'linear-gradient(160deg,#071a12 0%,#0d3020 50%,#071a12 100%)',
-    slate: 'linear-gradient(160deg,#0d1117 0%,#1c2333 50%,#0d1117 100%)'
+    forest:   'linear-gradient(160deg,#071a12 0%,#0d3020 50%,#071a12 100%)',
+    slate:    'linear-gradient(160deg,#0d1117 0%,#1c2333 50%,#0d1117 100%)'
   };
-  document.body.style.background = bgMap[cfg.bg] || bgMap.dark;
+  document.body.style.background = bgs[cfg.bg] || bgs.dark;
 
-  // Text color based on bg
-  const isDark = cfg.bg !== 'bright';
-  const textColor = isDark ? '#fff' : '#1a1520';
-  document.body.style.color = textColor;
+  var isDark = cfg.bg !== 'bright';
+  var tc = isDark ? '#fff' : '#1a1520';
+  var ff = cfg.font === 'jakarta' ? "'Plus Jakarta Sans',sans-serif" : "'Fraunces',serif";
+  var c1 = cfg.c1 || '#39b5bc';
 
-  // Update font
-  const ff = cfg.font === 'jakarta' ? "'Plus Jakarta Sans',sans-serif" : "'Fraunces',serif";
-
-  // Render links
-  const linksWrap = document.getElementById('links-wrap');
-  if (linksWrap && cfg.links) {
-    const links = typeof cfg.links === 'string' ? JSON.parse(cfg.links) : cfg.links;
-    linksWrap.innerHTML = links.map((l, i) => {
-      const isConnect = l.lbl === "I'm New Here" || l.lbl === 'Connect Card';
-      const onclick = isConnect
-        ? `onclick="trackLink('${l.lbl.replace(/'/g, \"\\'\"")}','#',event);openConnect(event)"`
-        : `onclick="trackLink('${l.lbl.replace(/'/g, \"\\'\"")}','${l.url}',event)"`;
-      return `<button class="link-btn" ${onclick} style="animation-delay:${0.1+i*0.05}s;border-color:rgba(${isDark?'255,255,255':'0,0,0'},0.11);background:rgba(${isDark?'255,255,255':'0,0,0'},${isDark?'0.07':'0.05'})">
-        <div class="link-icon" style="background:${cfg.c1}22">${l.icon}</div>
-        <div class="link-text">
-          <div class="link-label" style="color:${textColor};font-family:${ff}">${l.lbl}</div>
-          <div class="link-sub" style="color:${textColor}">${l.sub || ''}</div>
-        </div>
-        <div class="link-arrow" style="color:${textColor}">›</div>
-      </button>`;
-    }).join('');
+  var links = cfg.links || [];
+  if (typeof links === 'string') {
+    try { links = JSON.parse(links); } catch(e) { links = []; }
   }
 
-  // Greeting
-  const greetings = {
-    lobby: "☕ Welcome! Grab a coffee and make yourself at home.",
-    kids: "🧒 Welcome to KBC Kids! Tap below to check in.",
-    outdoor: "👋 Welcome to KBC! We're glad you're here."
+  buildLinks(links, tc, ff, c1, isDark);
+
+  var greetings = {
+    lobby:   'Welcome! Grab a coffee and make yourself at home.',
+    kids:    'Welcome to KBC Kids! Tap below to check in.',
+    outdoor: 'Welcome to KBC! We are glad you are here.'
   };
-  const gEl = document.getElementById('greeting');
-  if (gEl && greetings[circle]) {
-    gEl.textContent = greetings[circle];
-    gEl.classList.add('show');
+  if (greetings[circle]) {
+    var g = document.getElementById('greeting');
+    g.textContent = greetings[circle];
+    g.classList.add('show');
   }
 }
 
-function renderFallback() {
-  // Keep the hardcoded HTML as fallback — nothing to do
+function renderDefault() {
+  var links = [
+    { icon:'👋', lbl:"I'm New Here",   sub:'Say hello and connect',       url:'https://www.kbconline.ca',                          connect:true  },
+    { icon:'📋', lbl:'Connect Card',   sub:'Fill out and stay in touch',   url:'https://www.kbconline.ca/live-stream',              connect:true  },
+    { icon:'▶️', lbl:'Watch Online',   sub:'Live and past messages',       url:'https://www.kbconline.ca/live-stream',              connect:false },
+    { icon:'🙏', lbl:'Prayer Request', sub:'We are praying with you',      url:'https://www.kbconline.ca',                          connect:false },
+    { icon:'💛', lbl:'Give Online',    sub:'Generous and secure',          url:'https://www.kbconline.ca/give',                     connect:false },
+    { icon:'📅', lbl:'Events',         sub:'What is coming up at KBC',     url:'https://kbc.churchcenter.com/registrations/events', connect:false }
+  ];
+  buildLinks(links, '#fff', "'Fraunces',serif", '#39b5bc', true);
 }
 
-// ── CONNECT CARD ──────────────────────────────────────
+function buildLinks(links, tc, ff, c1, isDark) {
+  var wrap = document.getElementById('links-wrap');
+  wrap.innerHTML = '';
+  links.forEach(function(l, i) {
+    var btn = document.createElement('button');
+    btn.className = 'link-btn';
+    btn.style.animationDelay = (0.1 + i * 0.05) + 's';
+    if (!isDark) {
+      btn.style.background = 'rgba(0,0,0,0.05)';
+      btn.style.borderColor = 'rgba(0,0,0,0.1)';
+      btn.style.color = tc;
+    }
+    btn.innerHTML =
+      '<div class="link-icon" style="background:' + c1 + '22">' + (l.icon || '') + '</div>' +
+      '<div class="link-text">' +
+        '<div class="link-label" style="color:' + tc + ';font-family:' + ff + '">' + (l.lbl || '') + '</div>' +
+        '<div class="link-sub" style="color:' + tc + '">' + (l.sub || '') + '</div>' +
+      '</div>' +
+      '<div class="link-arrow" style="color:' + tc + '">›</div>';
+
+    var isConnect = l.connect || l.lbl === "I'm New Here" || l.lbl === 'Connect Card';
+    if (isConnect) {
+      btn.onclick = (function(name) {
+        return function(e) { trackLink(name, '#', e); openConnect(e); };
+      })(l.lbl);
+    } else {
+      btn.onclick = (function(name, url) {
+        return function(e) { trackLink(name, url, e); };
+      })(l.lbl, l.url);
+    }
+    wrap.appendChild(btn);
+  });
+}
+
 function openConnect(e) {
   if (e) e.preventDefault();
-  document.getElementById('connect-card').classList.add('show');
-  document.getElementById('connect-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  var card = document.getElementById('connect-card');
+  card.classList.add('show');
+  setTimeout(function() { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
 }
 
 function closeConnect() {
@@ -390,87 +238,71 @@ function closeConnect() {
 }
 
 function submitConnect() {
-  const first = document.getElementById('cc-first').value.trim();
-  const email = document.getElementById('cc-email').value.trim();
+  var first = document.getElementById('cc-first').value.trim();
+  var email = document.getElementById('cc-email').value.trim();
   if (!first || !email) { alert('Please enter your first name and email.'); return; }
-
-  fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/connect_cards', {
+  fetch(SB_URL + '/rest/v1/connect_cards', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Prefer': 'return=minimal' },
+    headers: sbHeaders(),
     body: JSON.stringify({
-      first_name: first, last_name: document.getElementById('cc-last').value,
-      email, phone: document.getElementById('cc-phone').value,
+      first_name: first,
+      last_name: document.getElementById('cc-last').value,
+      email: email,
+      phone: document.getElementById('cc-phone').value,
       visit_count: document.getElementById('cc-visit').value,
       interest: document.getElementById('cc-interest').value,
-      circle
+      circle: circle
     })
-  }).then(() => {
-    // Also notify via Netlify Forms
-    const fd = new FormData();
-    fd.append('form-name','connect-card');
-    fd.append('first-name',first);
-    fd.append('email',email);
-    fd.append('circle',circle);
-    fetch('/', {method:'POST',body:fd}).catch(()=>{});
+  }).then(function() {
+    var fd = new FormData();
+    fd.append('form-name', 'connect-card');
+    fd.append('first-name', first);
+    fd.append('email', email);
+    fd.append('circle', circle);
+    fetch('/', { method: 'POST', body: fd }).catch(function(){});
     document.getElementById('cc-form-wrap').style.display = 'none';
     document.getElementById('cc-success').classList.add('show');
-  }).catch(() => {
+  }).catch(function() {
     document.getElementById('cc-form-wrap').style.display = 'none';
     document.getElementById('cc-success').classList.add('show');
   });
 }
 
-// ── LINK CLICK TRACKING ───────────────────────────────
 function trackLink(linkName, url, event) {
   if (event) event.preventDefault();
-  fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/link_clicks', {
+  fetch(SB_URL + '/rest/v1/link_clicks', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Prefer': 'return=minimal' },
-    body: JSON.stringify({ circle, link_name: linkName, clicked_at: new Date().toISOString() })
-  }).catch(()=>{}).finally(() => {
+    headers: sbHeaders(),
+    body: JSON.stringify({ circle: circle, link_name: linkName, clicked_at: new Date().toISOString() })
+  }).catch(function(){}).finally(function() {
     if (url && url !== '#') window.open(url, '_blank');
   });
 }
 
-// ── TAP ANALYTICS ─────────────────────────────────────
-fetch('https://jhiovbtqrrvhbnesuerx.supabase.co/rest/v1/taps', {
+// Log tap
+fetch(SB_URL + '/rest/v1/taps', {
   method: 'POST',
-  headers: { 'Content-Type': 'application/json', 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoaW92YnRxcnJ2aGJuZXN1ZXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NDE1MzIsImV4cCI6MjA5MjQxNzUzMn0.geoVU3ZAqB0R8hNvXqu3Os7moy6RSjHvSNn1jssqidw', 'Prefer': 'return=minimal' },
-  body: JSON.stringify({ circle, user_agent: navigator.userAgent, referrer: document.referrer || '' })
-}).catch(()={});
+  headers: sbHeaders(),
+  body: JSON.stringify({ circle: circle, user_agent: navigator.userAgent, referrer: document.referrer || '' })
+}).catch(function(){});
 
-// ── SOCIAL MEDIA ──────────────────────────────────────
-const socialRow = document.getElementById('social-row');
-const socials = { facebook:'📘', instagram:'📸', youtube:'▶️', twitter:'𝕏', tiktok:'🎵', podcast:'🎧' };
-let hasSocial = false;
-Object.entries(socials).forEach(([key, icon]) => {
-  const url = params.get(key);
+// Social icons
+var socialRow = document.getElementById('social-row');
+var socials = { facebook:'📘', instagram:'📸', youtube:'▶️', twitter:'𝕏', tiktok:'🎵', podcast:'🎧' };
+var hasSocial = false;
+Object.keys(socials).forEach(function(key) {
+  var url = params.get(key);
   if (url) {
     hasSocial = true;
-    const a = document.createElement('a');
+    var a = document.createElement('a');
     a.href = url; a.target = '_blank'; a.className = 'social-icon';
-    a.textContent = icon;
+    a.textContent = socials[key];
     socialRow.appendChild(a);
   }
 });
 if (hasSocial) socialRow.style.display = 'flex';
 
-// ── START ─────────────────────────────────────────────
 loadCircle();
-
 </script>
-
-<!-- Netlify Forms detection tag (hidden) -->
-<form name="connect-card" netlify netlify-honeypot="bot-field" hidden>
-  <input name="first-name">
-  <input name="last-name">
-  <input name="email">
-  <input name="phone">
-  <input name="visit-count">
-  <input name="interest">
-  <input name="circle">
-  <input name="timestamp">
-</form>
-
 </body>
 </html>
